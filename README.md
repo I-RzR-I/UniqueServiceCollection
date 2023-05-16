@@ -7,7 +7,7 @@ This repository results from the necessity to avoid multiple and duplicate servi
 
 This can be a problem when in solution are multiple projects and a lot of services are injected into every project, and if some of the injected services required additional services, in some cases as a result of this manipulation services may be injected multiple times in the same project. In other words circular injection.
 
-To solve this problem are available some extension methods `AddUnique` or `CheckAndCleanUpDuplicateService` for `IServiceCollection`.
+To solve this problem are available some extension methods `AddUnique` or `CheckAndCleanUpDuplicateService` for `IServiceCollection` and `ServiceCollection`.
 
 **In case you wish to use it in your project, u can install the package from <a href="https://www.nuget.org/packages/UniqueServiceCollection" target="_blank">nuget.org</a>** or specify what version you want:
 
