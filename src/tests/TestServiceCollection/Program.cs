@@ -15,6 +15,10 @@ namespace TestServiceCollection
         {
             // Create service collection
             var serviceCollection = new ServiceCollection();
+            
+            serviceCollection.AddUnique<IServiceOne, ServiceOne>();
+            serviceCollection.AddUnique<IServiceOne, ServiceOne>(ServiceLifetime.Scoped);
+
             ConfigureServices(serviceCollection);
 
             // Create service provider
