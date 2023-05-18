@@ -50,6 +50,8 @@ namespace TestServiceCollection
             serviceCollection.AddUnique<IServiceOne, ServiceOne>();
             serviceCollection.AddUnique<IServiceOne, ServiceOne>(ServiceLifetime.Scoped);
 
+            serviceCollection.AddUnique<ServiceOne>();
+
             serviceCollection.CheckAndCleanUpDuplicateService<IServiceOne>();
         }
     }
