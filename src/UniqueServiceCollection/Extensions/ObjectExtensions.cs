@@ -35,6 +35,6 @@ namespace UniqueServiceCollection.Extensions
         /// <returns></returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR",
             "DomainCommonExtensions.CommonExtensions.NullExtensions.IsNull", 1)]
-        public static bool IsNull(this object obj) => obj == null;
+        internal static bool IsNull(this object obj) => obj == null;
     }
 }

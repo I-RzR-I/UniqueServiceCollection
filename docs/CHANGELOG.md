@@ -1,3 +1,6 @@
+### **1.0.2.0831** 
+-> Change visibility for used extension.<br />
+
 ### **1.0.2.0617** 
 -> Add extension methods `AddUnique` as AddSingleton.<br />
 
