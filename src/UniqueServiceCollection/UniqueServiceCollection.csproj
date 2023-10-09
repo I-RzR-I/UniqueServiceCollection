@@ -24,10 +24,6 @@
     <Language>en-US</Language>
     <RepositoryType>GIT</RepositoryType>
     <PackageIconUrl />
-
-    <SignAssembly>true</SignAssembly>
-    <DelaySign>true</DelaySign>
-    <AssemblyOriginatorKeyFile>UniqueServiceCollectionSign.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -54,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeSource" Version="1.0.5.1933" />
+    <PackageReference Include="CodeSource" Version="1.0.6.933" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
   </ItemGroup>
