@@ -37,7 +37,9 @@ using System.Resources;
 [assembly: AssemblyMetadata("ContactUrl", "")]
 [assembly: AssemblyMetadata("ContactName", "RzR")]
 [assembly: AssemblyMetadata("ContactEmail", "ddpRzR@hotmail.com")]
+
 [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.MainAssembly)]
-[assembly: AssemblyVersion("1.0.2.0831")]
-[assembly: AssemblyFileVersion("1.0.2.0831")]
-[assembly: AssemblyInformationalVersion("1.0.2.x")]
+
+[assembly: AssemblyVersion("1.0.3.0707")]
+[assembly: AssemblyFileVersion("1.0.3.0707")]
+[assembly: AssemblyInformationalVersion("1.0.3.x")]
