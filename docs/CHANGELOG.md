@@ -1,3 +1,6 @@
+### **v1.0.4.2241** 
+-> Fix wrong modification.<br />
+
 ### **1.0.2.0831** 
 -> Change visibility for used extension.<br />
 
