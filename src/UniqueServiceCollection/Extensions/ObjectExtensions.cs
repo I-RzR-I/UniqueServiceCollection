@@ -26,7 +26,7 @@ namespace UniqueServiceCollection.Extensions
     ///     Object extensions
     /// </summary>
     /// <remarks></remarks>
-    public static class ObjectExtensions
+    internal static class ObjectExtensions
     {
         /// <summary>
         ///     Is null

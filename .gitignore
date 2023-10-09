@@ -271,3 +271,6 @@ coverage.*
 
 # NCrunch
 *.ncrunchproject.user
+
+# Certificates
+*.pfx
