@@ -51,8 +51,8 @@
 
   <ItemGroup>
     <PackageReference Include="CodeSource" Version="1.0.6.933" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.32" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.32" />
   </ItemGroup>
 
   <ProjectExtensions>
@@ -61,7 +61,7 @@
     </VisualStudio>
   </ProjectExtensions>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="PowerShell -NoProfile -ExecutionPolicy unrestricted -file $(SolutionDir)../build/pack.ps1 $(ConfigurationName)" />
-  </Target>
+  </Target>-->
 </Project>
