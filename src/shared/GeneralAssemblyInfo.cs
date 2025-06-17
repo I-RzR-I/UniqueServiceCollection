@@ -29,7 +29,7 @@ using System.Resources;
 
 [assembly: AssemblyCompany("RzR ®")]
 [assembly: AssemblyProduct("UniqueServiceCollection")]
-[assembly: AssemblyCopyright("Copyright © 2022-2024 RzR All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2022-2025 RzR All rights reserved.")]
 [assembly: AssemblyTrademark("® RzR™")]
 [assembly: AssemblyDescription("A product that can check and remove/avoid multiple and duplicate services injection in your current project.")]
 
