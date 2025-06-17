@@ -40,7 +40,7 @@ namespace ExtensionsTest.ExtensionsTest
             collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
             collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
 
-            var hasAny = collection.HasAny(typeof(IServiceInvokeOne));
+            var hasAny = collection.SCHasAny(typeof(IServiceInvokeOne));
 
             Assert.IsNotNull(hasAny);
             Assert.IsTrue(hasAny);
@@ -53,7 +53,7 @@ namespace ExtensionsTest.ExtensionsTest
 
             Assert.IsNull(collection);
             // ReSharper disable once ExpressionIsAlwaysNull
-            Assert.ThrowsException<ArgumentNullException>(() => collection.HasAny(typeof(IServiceInvokeOne)));
+            Assert.ThrowsException<ArgumentNullException>(() => collection.SCHasAny(typeof(IServiceInvokeOne)));
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace ExtensionsTest.ExtensionsTest
 
             Assert.IsNotNull(collection);
             // ReSharper disable once ExpressionIsAlwaysNull
-            Assert.ThrowsException<ArgumentNullException>(() => collection.HasAny(collectionType));
+            Assert.ThrowsException<ArgumentNullException>(() => collection.SCHasAny(collectionType));
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace ExtensionsTest.ExtensionsTest
             collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
             collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
 
-            var hasAny = collection.HasAny<IServiceInvokeOne>();
+            var hasAny = collection.SCHasAny<IServiceInvokeOne>();
 
             Assert.IsNotNull(hasAny);
             Assert.IsTrue(hasAny);
@@ -94,7 +94,7 @@ namespace ExtensionsTest.ExtensionsTest
 
             Assert.AreEqual(4, collection.Count);
 
-            collection.IfHasAny(typeof(IServiceInvokeOne),
+            collection.SCIfHasAny(typeof(IServiceInvokeOne),
                 () => collection.RemoveAll(typeof(IServiceInvokeOne)));
 
             Assert.IsNotNull(collection);
@@ -113,7 +113,7 @@ namespace ExtensionsTest.ExtensionsTest
 
             Assert.AreEqual(4, collection.Count);
 
-            collection.IfHasAny<IServiceInvokeOne>(() => collection.RemoveAll<IServiceInvokeOne>());
+            collection.SCIfHasAny<IServiceInvokeOne>(() => collection.RemoveAll<IServiceInvokeOne>());
 
             Assert.IsNotNull(collection);
             Assert.AreEqual(2, collection.Count);
@@ -131,7 +131,7 @@ namespace ExtensionsTest.ExtensionsTest
 
             Assert.AreEqual(4, collection.Count);
 
-            collection.RemoveAllIfHasAny(typeof(IServiceInvokeOne));
+            collection.SCRemoveAllIfHasAny(typeof(IServiceInvokeOne));
 
             Assert.IsNotNull(collection);
             Assert.AreEqual(2, collection.Count);
@@ -149,7 +149,7 @@ namespace ExtensionsTest.ExtensionsTest
 
             Assert.AreEqual(4, collection.Count);
 
-            collection.RemoveAllIfHasAny<IServiceInvokeOne>();
+            collection.SCRemoveAllIfHasAny<IServiceInvokeOne>();
 
             Assert.IsNotNull(collection);
             Assert.AreEqual(2, collection.Count);
