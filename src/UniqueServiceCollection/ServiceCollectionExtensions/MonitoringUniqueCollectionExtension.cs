@@ -43,8 +43,9 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             where TService : class
         {
             var duplicates = serviceCollection.FindServiceDuplicate<TService>().ToList();
-            if (duplicates.IsNull() || !duplicates.Any())
+            if (duplicates.HasNoAnyInCollection())
                 return;
+
             foreach (var d in duplicates)
             {
                 serviceCollection.RemoveAll(d.ServiceDescriptor.ServiceType);
@@ -62,8 +63,9 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             where TService : class
         {
             var duplicates = serviceCollection.FindServiceDuplicate<TService>().ToList();
-            if (duplicates.IsNull() || !duplicates.Any())
+            if (duplicates.HasNoAnyInCollection())
                 return;
+
             foreach (var d in duplicates)
             {
                 serviceCollection.RemoveAll(d.ServiceDescriptor.ServiceType);
