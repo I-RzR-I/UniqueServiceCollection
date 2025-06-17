@@ -16,15 +16,15 @@
 
 #region U S A G E S
 
-using System;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Linq;
 using UniqueServiceCollection.Extensions;
 
 #endregion
 
-namespace UniqueServiceCollection
+namespace UniqueServiceCollection.ServiceCollectionExtensions
 {
     /// <summary>
     ///     Add unique service to application service collection.

@@ -25,7 +25,7 @@ using UniqueServiceCollection.Extensions;
 
 #endregion
 
-namespace UniqueServiceCollection
+namespace UniqueServiceCollection.ServiceCollectionExtensions
 {
     /// <summary>
     ///     Monitoring duplicate collection

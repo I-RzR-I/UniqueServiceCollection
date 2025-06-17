@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using TestServiceCollection.Abstractions;
 using TestServiceCollection.Services;
 using UniqueServiceCollection;
+using UniqueServiceCollection.ServiceCollectionExtensions;
 
 namespace TestServiceCollection
 {
