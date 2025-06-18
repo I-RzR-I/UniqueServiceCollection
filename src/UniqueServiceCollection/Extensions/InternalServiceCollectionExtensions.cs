@@ -437,5 +437,135 @@ namespace UniqueServiceCollection.Extensions
             if (serviceCollection.SCHasAny<TService>())
                 serviceCollection.RemoveAll<TService>();
         }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     An IServiceCollection extension method that screen add if has no any.
+        /// </summary>
+        /// <typeparam name="TService">Type of the service.</typeparam>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <param name="factory">The factory.</param>
+        /// <param name="lifetime">The lifetime.</param>
+        /// =================================================================================================
+        internal static void SCAddIfHasNoAny<TService>(this IServiceCollection serviceCollection,
+            Func<IServiceProvider, TService> factory, ServiceLifetime lifetime)
+            where TService : class
+        {
+            if (serviceCollection.SCHasNoAny(typeof(TService)))
+                serviceCollection.Add(ServiceDescriptor.Describe(typeof(TService), factory, lifetime));
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     An IServiceCollection extension method that screen add if has no any.
+        /// </summary>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="lifetime">The lifetime.</param>
+        /// =================================================================================================
+        internal static void SCAddIfHasNoAny(this IServiceCollection serviceCollection,
+            Type serviceType, ServiceLifetime lifetime)
+        {
+            if (serviceCollection.SCHasNoAny(serviceType))
+                serviceCollection.SCAddToServiceCollection(serviceType, lifetime);
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     An IServiceCollection extension method that screen add if has no any.
+        /// </summary>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="implementationType">Type of the implementation.</param>
+        /// <param name="lifetime">The lifetime.</param>
+        /// =================================================================================================
+        internal static void SCAddIfHasNoAny(this IServiceCollection serviceCollection,
+            Type serviceType, Type implementationType, ServiceLifetime lifetime)
+        {
+            if (serviceCollection.SCHasNoAny(serviceType))
+                serviceCollection.SCAddToServiceCollection(serviceType, implementationType, lifetime);
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     An IServiceCollection extension method that screen add to service collection.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when one or more arguments are outside the required range.
+        /// </exception>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="implementationType">Type of the implementation.</param>
+        /// <param name="lifetime">The lifetime.</param>
+        /// =================================================================================================
+        internal static void SCAddToServiceCollection(this IServiceCollection serviceCollection,
+            Type serviceType, Type implementationType, ServiceLifetime lifetime)
+        {
+            if (serviceCollection.IsNull())
+                throw new ArgumentNullException(nameof(serviceCollection));
+
+            if (serviceType.IsNull())
+                throw new ArgumentNullException(nameof(serviceType));
+
+            if (implementationType.IsNull())
+                throw new ArgumentNullException(nameof(implementationType));
+
+            switch (lifetime)
+            {
+                case ServiceLifetime.Singleton:
+                    serviceCollection.AddSingleton(serviceType, implementationType);
+                    break;
+                case ServiceLifetime.Scoped:
+                    serviceCollection.AddScoped(serviceType, implementationType);
+                    break;
+                case ServiceLifetime.Transient:
+                    serviceCollection.AddTransient(serviceType, implementationType);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(lifetime), lifetime, null);
+            }
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     An IServiceCollection extension method that screen add to service collection.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when one or more arguments are outside the required range.
+        /// </exception>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="lifetime">The lifetime.</param>
+        /// =================================================================================================
+        internal static void SCAddToServiceCollection(this IServiceCollection serviceCollection,
+            Type serviceType, ServiceLifetime lifetime)
+        {
+            if (serviceCollection.IsNull())
+                throw new ArgumentNullException(nameof(serviceCollection));
+
+            if (serviceType.IsNull())
+                throw new ArgumentNullException(nameof(serviceType));
+
+            switch (lifetime)
+            {
+                case ServiceLifetime.Singleton:
+                    serviceCollection.AddSingleton(serviceType);
+                    break;
+                case ServiceLifetime.Scoped:
+                    serviceCollection.AddScoped(serviceType);
+                    break;
+                case ServiceLifetime.Transient:
+                    serviceCollection.AddTransient(serviceType);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(lifetime), lifetime, null);
+            }
+        }
     }
 }
