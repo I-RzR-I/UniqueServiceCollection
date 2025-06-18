@@ -24,7 +24,7 @@ using UniqueServiceCollection.Extensions;
 
 #endregion
 
-namespace ExtensionsTest.ExtensionsTest
+namespace ExtensionsTest.TestExtensions
 {
     [TestClass]
     public class EnumerableExtensionsTests
