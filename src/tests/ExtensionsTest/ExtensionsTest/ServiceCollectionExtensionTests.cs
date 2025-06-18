@@ -32,7 +32,30 @@ namespace ExtensionsTest.ExtensionsTest
     public class ServiceCollectionExtensionTests
     {
         [TestMethod]
-        public void HasAny_Test()
+        public void SCHasAny_Null_Test_Should_Pass()
+        {
+            ServiceCollection collection = null;
+
+            // ReSharper disable once ExpressionIsAlwaysNull
+            var hasAny = collection.SCHasAny(typeof(IServiceInvokeOne));
+
+            Assert.IsNotNull(hasAny);
+            Assert.IsFalse(hasAny);
+        }
+
+        [TestMethod]
+        public void SCHasAny_Empty_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            var hasAny = collection.SCHasAny(typeof(IServiceInvokeOne));
+
+            Assert.IsNotNull(hasAny);
+            Assert.IsFalse(hasAny);
+        }
+
+        [TestMethod]
+        public void SCHasAny_Test_Should_Pass()
         {
             var collection = new ServiceCollection();
 
@@ -47,17 +70,30 @@ namespace ExtensionsTest.ExtensionsTest
         }
 
         [TestMethod]
-        public void HasAny_ArgumentNullException_Collection_Test()
+        public void SCHasNoAny_Empty_Test_Should_Pass()
         {
-            ServiceCollection collection = null;
+            var collection = new ServiceCollection();
 
-            Assert.IsNull(collection);
-            // ReSharper disable once ExpressionIsAlwaysNull
-            Assert.ThrowsException<ArgumentNullException>(() => collection.SCHasAny(typeof(IServiceInvokeOne)));
+            var hasAny = collection.SCHasNoAny(typeof(IServiceInvokeOne));
+
+            Assert.IsNotNull(hasAny);
+            Assert.IsTrue(hasAny);
         }
 
         [TestMethod]
-        public void HasAny_ArgumentNullException_CollectionType_Test()
+        public void SCHasNoAny_Null_Test_Should_Pass()
+        {
+            ServiceCollection collection = null;
+
+            // ReSharper disable once ExpressionIsAlwaysNull
+            var hasAny = collection.SCHasNoAny(typeof(IServiceInvokeOne));
+
+            Assert.IsNotNull(hasAny);
+            Assert.IsFalse(hasAny);
+        }
+
+        [TestMethod]
+        public void SCHasAny_ArgumentNullException_CollectionType_Test_Should_Pass()
         {
             var collection = new ServiceCollection();
             Type collectionType = null;
@@ -68,7 +104,7 @@ namespace ExtensionsTest.ExtensionsTest
         }
 
         [TestMethod]
-        public void HasAny_T_Test()
+        public void SCHasAny_T_Test_Should_Pass()
         {
             var collection = new ServiceCollection();
 
@@ -83,7 +119,7 @@ namespace ExtensionsTest.ExtensionsTest
         }
 
         [TestMethod]
-        public void IfHasAny_Test()
+        public void SCIfHasAny_Test_Should_Pass()
         {
             var collection = new ServiceCollection();
 
@@ -102,7 +138,53 @@ namespace ExtensionsTest.ExtensionsTest
         }
 
         [TestMethod]
-        public void IfHasAny_T_Test()
+        public void SCIfHasAny_Null_Collection_Test_Should_Pass()
+        {
+            ServiceCollection collection = null;
+
+            Assert.IsNull(collection);
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                // ReSharper disable once ExpressionIsAlwaysNull
+                collection.SCIfHasAny(typeof(IServiceInvokeOne),
+                    // ReSharper disable once ExpressionIsAlwaysNull
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    () => collection.RemoveAll(typeof(IServiceInvokeOne))));
+        }
+
+        [TestMethod]
+        public void SCIfHasAny_Null_CollectionType_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvoke, ServiceInvoke>();
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddTransient<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                // ReSharper disable once ExpressionIsAlwaysNull
+                collection.SCIfHasAny(null,
+                    () => collection.RemoveAll(typeof(IServiceInvokeOne))));
+        }
+
+        [TestMethod]
+        public void SCIfHasAny_Null_Action_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvoke, ServiceInvoke>();
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddTransient<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                collection.SCIfHasAny(typeof(IServiceInvokeOne),
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    () => collection.RemoveAll(null)));
+        }
+
+        [TestMethod]
+        public void SCIfHasAny_T_Test_Should_Pass()
         {
             var collection = new ServiceCollection();
 
@@ -120,7 +202,7 @@ namespace ExtensionsTest.ExtensionsTest
         }
 
         [TestMethod]
-        public void RemoveAllIfHasAny_Test()
+        public void SCRemoveAllIfHasAny_Test_Should_Pass()
         {
             var collection = new ServiceCollection();
 
@@ -138,7 +220,7 @@ namespace ExtensionsTest.ExtensionsTest
         }
 
         [TestMethod]
-        public void RemoveAllIfHasAny_T_Test()
+        public void SCRemoveAllIfHasAny_T_Test_Should_Pass()
         {
             var collection = new ServiceCollection();
 
@@ -153,6 +235,16 @@ namespace ExtensionsTest.ExtensionsTest
 
             Assert.IsNotNull(collection);
             Assert.AreEqual(2, collection.Count);
+        }
+
+        [TestMethod]
+        public void SCRemoveAllIfHasAny_T_ThrowArgumentNullException_Test_Should_Pass()
+        {
+            ServiceCollection collection = null;
+
+            Assert.IsNull(collection);
+            // ReSharper disable once ExpressionIsAlwaysNull
+            Assert.ThrowsException<ArgumentNullException>(() => collection.SCRemoveAllIfHasAny<IServiceInvokeOne>());
         }
     }
 }

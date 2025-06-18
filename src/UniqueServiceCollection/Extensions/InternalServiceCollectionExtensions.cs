@@ -49,9 +49,6 @@ namespace UniqueServiceCollection.Extensions
         /// =================================================================================================
         internal static bool SCHasAny(this ServiceCollection serviceCollection, Type collectionType)
         {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
             if (collectionType.IsNull())
                 throw new ArgumentNullException(nameof(collectionType));
 
@@ -69,7 +66,7 @@ namespace UniqueServiceCollection.Extensions
         /// </returns>
         /// =================================================================================================
         internal static bool SCHasNoAny(this ServiceCollection serviceCollection, Type collectionType)
-            => !serviceCollection.SCHasAny(collectionType);
+            => serviceCollection.IsNotNull() && !serviceCollection.SCHasAny(collectionType);
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -86,9 +83,6 @@ namespace UniqueServiceCollection.Extensions
         /// =================================================================================================
         internal static bool SCHasAny(this IServiceCollection serviceCollection, Type collectionType)
         {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
             if (collectionType.IsNull())
                 throw new ArgumentNullException(nameof(collectionType));
 
@@ -106,7 +100,7 @@ namespace UniqueServiceCollection.Extensions
         /// </returns>
         /// =================================================================================================
         internal static bool SCHasNoAny(this IServiceCollection serviceCollection, Type collectionType)
-            => !serviceCollection.SCHasAny(collectionType);
+            => serviceCollection.IsNotNull() && !serviceCollection.SCHasAny(collectionType);
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -123,12 +117,7 @@ namespace UniqueServiceCollection.Extensions
         /// =================================================================================================
         internal static bool SCHasAny<TService>(this ServiceCollection serviceCollection)
             where TService : class
-        {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
-            return serviceCollection.IsNotNull() && serviceCollection.Any(x => x.ServiceType == typeof(TService));
-        }
+            => serviceCollection.IsNotNull() && serviceCollection.Any(x => x.ServiceType == typeof(TService));
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -142,7 +131,7 @@ namespace UniqueServiceCollection.Extensions
         /// =================================================================================================
         internal static bool SCHasNoAny<TService>(this ServiceCollection serviceCollection)
             where TService : class
-            => !serviceCollection.SCHasAny<TService>();
+            => serviceCollection.IsNotNull() && !serviceCollection.SCHasAny<TService>();
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -159,12 +148,7 @@ namespace UniqueServiceCollection.Extensions
         /// =================================================================================================
         internal static bool SCHasAny<TService>(this IServiceCollection serviceCollection)
             where TService : class
-        {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
-            return serviceCollection.IsNotNull() && serviceCollection.Any(x => x.ServiceType == typeof(TService));
-        }
+            => serviceCollection.IsNotNull() && serviceCollection.Any(x => x.ServiceType == typeof(TService));
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -178,7 +162,7 @@ namespace UniqueServiceCollection.Extensions
         /// =================================================================================================
         internal static bool SCHasNoAny<TService>(this IServiceCollection serviceCollection)
             where TService : class
-            => !serviceCollection.SCHasAny<TService>();
+            => serviceCollection.IsNotNull() && !serviceCollection.SCHasAny<TService>();
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
