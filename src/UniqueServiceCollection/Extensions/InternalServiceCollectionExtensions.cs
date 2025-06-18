@@ -166,6 +166,92 @@ namespace UniqueServiceCollection.Extensions
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
+        ///     A ServiceCollection extension method that screen count by type.
+        /// </summary>
+        /// <typeparam name="TService">Type of the service.</typeparam>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <returns>
+        ///     An int.
+        /// </returns>
+        /// =================================================================================================
+        internal static int SCCountByType<TService>(this IServiceCollection serviceCollection)
+            where TService : class
+        {
+            if (serviceCollection.IsNull())
+                return 0;
+
+            return serviceCollection.Count(x => x.ServiceType == typeof(TService));
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     A ServiceCollection extension method that screen count by type.
+        /// </summary>
+        /// <typeparam name="TService">Type of the service.</typeparam>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <returns>
+        ///     An int.
+        /// </returns>
+        /// =================================================================================================
+        internal static int SCCountByType<TService>(this ServiceCollection serviceCollection)
+            where TService : class
+        {
+            if (serviceCollection.IsNull())
+                return 0;
+
+            return serviceCollection.Count(x => x.ServiceType == typeof(TService));
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     A ServiceCollection extension method that screen count by type.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <param name="collectionType">Type of the collection.</param>
+        /// <returns>
+        ///     An int.
+        /// </returns>
+        /// =================================================================================================
+        internal static int SCCountByType(this IServiceCollection serviceCollection, Type collectionType)
+        {
+            if (collectionType.IsNull())
+                throw new ArgumentNullException(nameof(collectionType));
+
+            if (serviceCollection.IsNull())
+                return 0;
+
+            return serviceCollection.Count(x => x.ServiceType == collectionType);
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     A ServiceCollection extension method that screen count by type.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <param name="collectionType">Type of the collection.</param>
+        /// <returns>
+        ///     An int.
+        /// </returns>
+        /// =================================================================================================
+        internal static int SCCountByType(this ServiceCollection serviceCollection, Type collectionType)
+        {
+            if (collectionType.IsNull())
+                throw new ArgumentNullException(nameof(collectionType));
+
+            if (serviceCollection.IsNull())
+                return 0;
+
+            return serviceCollection.Count(x => x.ServiceType == collectionType);
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
         ///     A ServiceCollection extension method that if has any execute action.
         /// </summary>
         /// <exception cref="ArgumentNullException">
@@ -186,7 +272,7 @@ namespace UniqueServiceCollection.Extensions
             if (executeAction.IsNull())
                 throw new ArgumentNullException(nameof(executeAction));
 
-            if (serviceCollection.SCHasAny(collectionType)) 
+            if (serviceCollection.SCHasAny(collectionType))
                 executeAction.Invoke();
         }
 
@@ -212,7 +298,7 @@ namespace UniqueServiceCollection.Extensions
             if (executeAction.IsNull())
                 throw new ArgumentNullException(nameof(executeAction));
 
-            if (serviceCollection.SCHasAny(collectionType)) 
+            if (serviceCollection.SCHasAny(collectionType))
                 executeAction.Invoke();
         }
 
@@ -236,7 +322,7 @@ namespace UniqueServiceCollection.Extensions
             if (executeAction.IsNull())
                 throw new ArgumentNullException(nameof(executeAction));
 
-            if (serviceCollection.SCHasAny<TService>()) 
+            if (serviceCollection.SCHasAny<TService>())
                 executeAction.Invoke();
         }
 
@@ -260,7 +346,7 @@ namespace UniqueServiceCollection.Extensions
             if (executeAction.IsNull())
                 throw new ArgumentNullException(nameof(executeAction));
 
-            if (serviceCollection.SCHasAny<TService>()) 
+            if (serviceCollection.SCHasAny<TService>())
                 executeAction.Invoke();
         }
 
@@ -327,7 +413,7 @@ namespace UniqueServiceCollection.Extensions
             if (serviceCollection.IsNull())
                 throw new ArgumentNullException(nameof(serviceCollection));
 
-            if (serviceCollection.SCHasAny<TService>()) 
+            if (serviceCollection.SCHasAny<TService>())
                 serviceCollection.RemoveAll<TService>();
         }
 
@@ -348,7 +434,7 @@ namespace UniqueServiceCollection.Extensions
             if (serviceCollection.IsNull())
                 throw new ArgumentNullException(nameof(serviceCollection));
 
-            if (serviceCollection.SCHasAny<TService>()) 
+            if (serviceCollection.SCHasAny<TService>())
                 serviceCollection.RemoveAll<TService>();
         }
     }
