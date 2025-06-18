@@ -49,49 +49,10 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         public static void AddUnique(this IServiceCollection serviceCollection, 
             Type serviceType, object instance)
         {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
-            if (serviceType.IsNull())
-                throw new ArgumentNullException(nameof(serviceType));
-
-            if (instance.IsNull())
-                throw new ArgumentNullException(nameof(instance));
+            serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
+            serviceType.IfNullThrowArgumentNullException(nameof(serviceType));
+            instance.IfNullThrowArgumentNullException(nameof(instance));
             
-            serviceCollection.SCRemoveAllIfHasAny(serviceType);
-
-            //Add new service instance of serviceType
-            serviceCollection.AddSingleton(serviceType, instance);
-        }
-
-        /// <summary>
-        ///     Add unique `Singleton` service of the type <paramref name="serviceType" />
-        ///     to current <see cref="ServiceCollection" />.
-        /// </summary>
-        /// <example>
-        ///     serviceCollection.AddUnique(f =>
-        ///     new TempService(f.GetRequiredService&lt;Service1&gt;(),
-        ///     f.GetRequiredService&lt;Service2&gt;()));
-        /// </example>
-        /// <param name="serviceCollection">Service collection</param>
-        /// <param name="serviceType">Service type</param>
-        /// <param name="instance">Service instance</param>
-        /// <remarks>
-        ///     Before add new service instance of the type <paramref name="serviceType" />,
-        ///     all previously  defined services will be removed.
-        /// </remarks>
-        public static void AddUnique(this ServiceCollection serviceCollection, 
-            Type serviceType, object instance)
-        {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
-            if (serviceType.IsNull())
-                throw new ArgumentNullException(nameof(serviceType));
-
-            if (instance.IsNull())
-                throw new ArgumentNullException(nameof(instance));
-
             serviceCollection.SCRemoveAllIfHasAny(serviceType);
 
             //Add new service instance of serviceType
@@ -117,49 +78,15 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         public static void AddUnique<TService>(this IServiceCollection serviceCollection, TService instance)
             where TService : class
         {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
-            if (instance.IsNull())
-                throw new ArgumentNullException(nameof(instance));
+            serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
+            instance.IfNullThrowArgumentNullException(nameof(instance));
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
             serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
         }
-
-        /// <summary>
-        ///     Add unique `Singleton` service of the type <typeparamref name="TService" />
-        ///     to current <see cref="ServiceCollection" />.
-        /// </summary>
-        /// <example>
-        ///     serviceCollection.AddUnique&lt;ITempService&gt;(f =>
-        ///     new TempService(f.GetRequiredService&lt;Service1&gt;(),
-        ///     f.GetRequiredService&lt;Service2&gt;()));
-        /// </example>
-        /// <param name="serviceCollection">Service collection</param>
-        /// <param name="instance">Service instance</param>
-        /// <typeparam name="TService">Type of service that will be added</typeparam>
-        /// <remarks>
-        ///     Before add new service instance of the type <typeparamref name="TService" />,
-        ///     all previously  defined services will be removed.
-        /// </remarks>
-        public static void AddUnique<TService>(this ServiceCollection serviceCollection, TService instance)
-            where TService : class
-        {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
-            if (instance.IsNull())
-                throw new ArgumentNullException(nameof(instance));
-
-            serviceCollection.SCRemoveAllIfHasAny<TService>();
-
-            //Add new service instance
-            serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
-        }
-
+        
         /// <summary>
         ///     Add unique `Singleton` service of the type <typeparamref name="TService" />
         ///     to current <see cref="IServiceCollection" />.
@@ -176,33 +103,7 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         public static void AddUnique<TService>(this IServiceCollection serviceCollection)
             where TService : class
         {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
-
-            serviceCollection.SCRemoveAllIfHasAny<TService>();
-
-            //Add new service instance
-            serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
-        }
-
-        /// <summary>
-        ///     Add unique `Singleton` service of the type <typeparamref name="TService" />
-        ///     to current <see cref="ServiceCollection" />.
-        /// </summary>
-        /// <example>
-        ///     serviceCollection.AddUnique&lt;Service1&gt;();
-        /// </example>
-        /// <param name="serviceCollection">Service collection</param>
-        /// <typeparam name="TService">Type of service that will be added</typeparam>
-        /// <remarks>
-        ///     Before add new service instance of the type <typeparamref name="TService" />,
-        ///     all previously  defined services will be removed.
-        /// </remarks>
-        public static void AddUnique<TService>(this ServiceCollection serviceCollection)
-            where TService : class
-        {
-            if (serviceCollection.IsNull())
-                throw new ArgumentNullException(nameof(serviceCollection));
+            serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
