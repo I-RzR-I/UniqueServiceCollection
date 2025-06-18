@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿#region U S A G E S
+
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using Microsoft.Extensions.Configuration;
 using TestServiceCollection.Abstractions;
 using TestServiceCollection.Services;
-using UniqueServiceCollection;
 using UniqueServiceCollection.ServiceCollectionExtensions;
+
+#endregion
 
 namespace TestServiceCollection
 {
@@ -16,7 +16,7 @@ namespace TestServiceCollection
         {
             // Create service collection
             var serviceCollection = new ServiceCollection();
-            
+
             serviceCollection.AddUnique<IServiceOne, ServiceOne>();
             serviceCollection.AddUnique<IServiceOne, ServiceOne>(ServiceLifetime.Scoped);
 
@@ -33,7 +33,7 @@ namespace TestServiceCollection
             logger.LogDebug("Application started");
         }
 
-        static void ConfigureServices(IServiceCollection serviceCollection)
+        private static void ConfigureServices(IServiceCollection serviceCollection)
         {
             // Add logging
             serviceCollection.AddSingleton<ILoggerFactory, LoggerFactory>();

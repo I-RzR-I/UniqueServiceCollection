@@ -246,5 +246,144 @@ namespace ExtensionsTest.TestExtensions
             // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(() => collection.SCRemoveAllIfHasAny<IServiceInvokeOne>());
         }
+
+        [TestMethod]
+        public void SCHasNoAny_T_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.AreEqual(2, collection.Count);
+
+            var check = collection.SCHasNoAny<IServiceInvoke>();
+
+            Assert.IsNotNull(collection);
+            Assert.IsTrue(check);
+        }
+
+        [TestMethod]
+        public void SCCountByType_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvoke, ServiceInvoke>();
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.AreEqual(3, collection.Count);
+
+            var count = collection.SCCountByType(typeof(IServiceInvokeTwo));
+
+            Assert.IsNotNull(collection);
+            Assert.AreEqual(1, count);
+        }
+
+        [TestMethod]
+        public void SCAddIfHasNoAny_Type_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.AreEqual(2, collection.Count);
+
+            collection.SCAddIfHasNoAny(typeof(IServiceInvoke), typeof(ServiceInvoke),
+                ServiceLifetime.Scoped);
+
+            Assert.IsNotNull(collection);
+            Assert.AreEqual(3, collection.Count);
+        }
+
+        [TestMethod]
+        public void SCAddIfHasNoAny_Type_Exist_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvoke, ServiceInvoke>();
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.AreEqual(3, collection.Count);
+
+            collection.SCAddIfHasNoAny(typeof(IServiceInvoke), typeof(ServiceInvoke),
+                ServiceLifetime.Scoped);
+
+            Assert.IsNotNull(collection);
+            Assert.AreEqual(3, collection.Count);
+        }
+
+        [TestMethod]
+        public void SCAddIfHasNoAny_Type_2_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.AreEqual(2, collection.Count);
+
+            collection.SCAddIfHasNoAny(typeof(ServiceInvoke),
+                ServiceLifetime.Scoped);
+
+            Assert.IsNotNull(collection);
+            Assert.AreEqual(3, collection.Count);
+        }
+
+        [TestMethod]
+        public void SCAddIfHasNoAny_Type_3_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvoke, ServiceInvoke>();
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.AreEqual(3, collection.Count);
+
+            collection.SCAddIfHasNoAny(typeof(ServiceInvoke),
+                ServiceLifetime.Scoped);
+
+            Assert.IsNotNull(collection);
+            Assert.AreEqual(4, collection.Count);
+        }
+
+        [TestMethod]
+        public void SCAddToServiceCollection_Type_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvoke, ServiceInvoke>();
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.AreEqual(3, collection.Count);
+
+            collection.SCAddToServiceCollection(typeof(ServiceInvoke), ServiceLifetime.Scoped);
+            collection.SCAddToServiceCollection(typeof(ServiceInvokeOne), ServiceLifetime.Transient);
+
+            Assert.IsNotNull(collection);
+            Assert.AreEqual(5, collection.Count);
+        }
+
+        [TestMethod]
+        public void SCAddToServiceCollection_Type_x2_Test_Should_Pass()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddScoped<IServiceInvoke, ServiceInvoke>();
+            collection.AddScoped<IServiceInvokeOne, ServiceInvokeOne>();
+            collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
+
+            Assert.AreEqual(3, collection.Count);
+
+            collection.SCAddToServiceCollection(typeof(IServiceInvoke), typeof(ServiceInvoke), ServiceLifetime.Scoped);
+            collection.SCAddToServiceCollection(typeof(IServiceInvokeOne),typeof(ServiceInvokeOne), ServiceLifetime.Transient);
+
+            Assert.IsNotNull(collection);
+            Assert.AreEqual(5, collection.Count);
+        }
     }
 }
