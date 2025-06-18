@@ -31,8 +31,6 @@ namespace TestServiceCollection
 
 
             logger.LogDebug("Application started");
-
-
         }
 
         static void ConfigureServices(IServiceCollection serviceCollection)
