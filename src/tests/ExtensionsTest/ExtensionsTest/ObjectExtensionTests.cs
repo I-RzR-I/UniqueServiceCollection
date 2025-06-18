@@ -27,9 +27,8 @@ namespace ExtensionsTest.ExtensionsTest
     public class ObjectExtensionTests
     {
         [DataRow(null)]
-        [DataRow(null)]
         [TestMethod]
-        public void IsNull_Test(object objValue)
+        public void IsNull_Test_Should_Pass(object objValue)
         {
             var isTrue = objValue.IsNull();
 
@@ -40,7 +39,7 @@ namespace ExtensionsTest.ExtensionsTest
         [DataRow(10)]
         [DataRow("10")]
         [TestMethod]
-        public void IsNotNull_Test(object objValue)
+        public void IsNotNull_Test_Should_Pass(object objValue)
         {
             var isTrue = objValue.IsNotNull();
 
