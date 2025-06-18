@@ -17,108 +17,129 @@
 #region U S A G E S
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
-using System.Linq;
 using UniqueServiceCollection.Extensions;
 
 #endregion
 
 namespace UniqueServiceCollection.ServiceCollectionExtensions
 {
+    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Add unique service to application service collection.
     /// </summary>
-    /// <remarks>All previous defined service of specified type will be removed from collection.</remarks>
+    /// <remarks>
+    ///     All previous defined service of specified type will be removed from collection.
+    /// </remarks>
+    /// =================================================================================================
     public static partial class AddUniqueCollectionExtensions
     {
+        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique service of the type <typeparamref name="TService" />
         ///     with his implementation on the specified type <typeparamref name="TImplementing" />
         ///     to current <see cref="IServiceCollection" />.
         /// </summary>
+        /// <remarks>
+        ///     Before add new service instance of the type <typeparamref name="TService" />, all
+        ///     previously  defined services will be removed.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <typeparam name="TService">Type of service that will be added.</typeparam>
+        /// <typeparam name="TImplementing">Type of service implementation.</typeparam>
+        /// <param name="serviceCollection">Required. Service collection.</param>
+        /// <param name="lifetime">
+        ///     (Optional) Optional. The default value is ServiceLifetime.Singleton.
+        /// </param>
         /// <example>
         ///     serviceCollection.AddUnique&lt;IServiceOne, ServiceOne&gt;();
         ///     serviceCollection.AddUnique&lt;IServiceOne, ServiceOne&gt;(ServiceLifetime.Scoped);
+        /// 
         /// </example>
-        /// <param name="serviceCollection">Required. Service collection </param>
-        /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
-        /// <typeparam name="TService">Type of service that will be added</typeparam>
-        /// <typeparam name="TImplementing">Type of service implementation</typeparam>
-        /// <remarks>
-        ///     Before add new service instance of the type <typeparamref name="TService" />,
-        ///     all previously  defined services will be removed.
-        /// </remarks>
-        public static void AddUnique<TService, TImplementing>(
-            this IServiceCollection serviceCollection, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+        /// =================================================================================================
+        public static void AddUnique<TService, TImplementing>(this IServiceCollection serviceCollection,
+            ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
             where TImplementing : class, TService
         {
             if (serviceCollection.IsNull())
                 throw new ArgumentNullException(nameof(serviceCollection));
 
-            if (serviceCollection.Any(x => x.ServiceType == typeof(TService)))
-                //Remove all type of TService
-                serviceCollection.RemoveAll<TService>();
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
-            serviceCollection.Add(ServiceDescriptor.Describe(typeof(TService), typeof(TImplementing), lifetime));
+            serviceCollection.SCAddIfHasNoAny(typeof(TService), typeof(TImplementing), lifetime);
         }
-        
+
+        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique service of the type <typeparamref name="TService" />
         ///     with his implementation on the specified type <typeparamref name="TImplementing" />
         ///     to current <see cref="ServiceCollection" />.
         /// </summary>
+        /// <remarks>
+        ///     Before add new service instance of the type <typeparamref name="TService" />, all
+        ///     previously  defined services will be removed.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <typeparam name="TService">Type of service that will be added.</typeparam>
+        /// <typeparam name="TImplementing">Type of service implementation.</typeparam>
+        /// <param name="serviceCollection">Required. Service collection.</param>
+        /// <param name="lifetime">
+        ///     (Optional) Optional. The default value is ServiceLifetime.Singleton.
+        /// </param>
         /// <example>
         ///     serviceCollection.AddUnique&lt;IServiceOne, ServiceOne&gt;();
         ///     serviceCollection.AddUnique&lt;IServiceOne, ServiceOne&gt;(ServiceLifetime.Scoped);
+        /// 
         /// </example>
-        /// <param name="serviceCollection">Required. Service collection </param>
-        /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
-        /// <typeparam name="TService">Type of service that will be added</typeparam>
-        /// <typeparam name="TImplementing">Type of service implementation</typeparam>
-        /// <remarks>
-        ///     Before add new service instance of the type <typeparamref name="TService" />,
-        ///     all previously  defined services will be removed.
-        /// </remarks>
-        public static void AddUnique<TService, TImplementing>(
-            this ServiceCollection serviceCollection, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+        /// =================================================================================================
+        public static void AddUnique<TService, TImplementing>(this ServiceCollection serviceCollection,
+            ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
             where TImplementing : class, TService
         {
             if (serviceCollection.IsNull())
                 throw new ArgumentNullException(nameof(serviceCollection));
 
-            if (serviceCollection.Any(x => x.ServiceType == typeof(TService)))
-                //Remove all type of TService
-                serviceCollection.RemoveAll<TService>();
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
-            serviceCollection.Add(ServiceDescriptor.Describe(typeof(TService), typeof(TImplementing), lifetime));
+            serviceCollection.SCAddIfHasNoAny(typeof(TService), typeof(TImplementing), lifetime);
         }
 
+        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique service of the type <typeparamref name="TService" /> with specified  factory
         ///     to current <see cref="IServiceCollection" />.
         /// </summary>
+        /// <remarks>
+        ///     Before add new service instance of the type <typeparamref name="TService" />, all
+        ///     previously  defined services will be removed.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <typeparam name="TService">Type of service that will be added.</typeparam>
+        /// <param name="serviceCollection">Required. Service collection.</param>
+        /// <param name="factory">Required. Service provider factory.</param>
+        /// <param name="lifetime">
+        ///     (Optional) Optional. The default value is ServiceLifetime.Singleton.
+        /// </param>
         /// <example>
         ///     serviceCollection.AddUnique&lt;IService&gt;(factory =>
         ///     {
-        ///     IHostingEnvironment hostingEnvironment = factory.GetRequiredService&lt;IHostingEnvironment&gt;();
+        ///     IHostingEnvironment hostingEnvironment = factory.GetRequiredService&lt;
+        ///     IHostingEnvironment&gt;();
         ///     return new OsHelper(hostingEnvironment);
         ///     });
         /// </example>
-        /// <param name="serviceCollection">Required. Service collection</param>
-        /// <param name="factory">Required. Service provider factory</param>
-        /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
-        /// <typeparam name="TService">Type of service that will be added</typeparam>
-        /// <remarks>
-        ///     Before add new service instance of the type <typeparamref name="TService" />,
-        ///     all previously  defined services will be removed.
-        /// </remarks>
-        public static void AddUnique<TService>(
-            this IServiceCollection serviceCollection,
+        /// =================================================================================================
+        public static void AddUnique<TService>(this IServiceCollection serviceCollection,
             Func<IServiceProvider, TService> factory, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
         {
@@ -128,35 +149,40 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             if (factory.IsNull())
                 throw new ArgumentNullException(nameof(factory));
 
-            if (serviceCollection.Any(x => x.ServiceType == typeof(TService)))
-                //Remove all type of TService
-                serviceCollection.RemoveAll<TService>();
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
-            serviceCollection.Add(ServiceDescriptor.Describe(typeof(TService), factory, lifetime));
+            serviceCollection.SCAddIfHasNoAny(factory, lifetime);
         }
 
+        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique service of the type <typeparamref name="TService" /> with specified  factory
         ///     to current <see cref="ServiceCollection" />.
         /// </summary>
+        /// <remarks>
+        ///     Before add new service instance of the type <typeparamref name="TService" />, all
+        ///     previously  defined services will be removed.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <typeparam name="TService">Type of service that will be added.</typeparam>
+        /// <param name="serviceCollection">Required. Service collection.</param>
+        /// <param name="factory">Required. Service provider factory.</param>
+        /// <param name="lifetime">
+        ///     (Optional) Optional. The default value is ServiceLifetime.Singleton.
+        /// </param>
         /// <example>
         ///     serviceCollection.AddUnique&lt;IService&gt;(factory =>
         ///     {
-        ///     IHostingEnvironment hostingEnvironment = factory.GetRequiredService&lt;IHostingEnvironment&gt;();
+        ///     IHostingEnvironment hostingEnvironment = factory.GetRequiredService&lt;
+        ///     IHostingEnvironment&gt;();
         ///     return new OsHelper(hostingEnvironment);
         ///     });
         /// </example>
-        /// <param name="serviceCollection">Required. Service collection</param>
-        /// <param name="factory">Required. Service provider factory</param>
-        /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
-        /// <typeparam name="TService">Type of service that will be added</typeparam>
-        /// <remarks>
-        ///     Before add new service instance of the type <typeparamref name="TService" />,
-        ///     all previously  defined services will be removed.
-        /// </remarks>
-        public static void AddUnique<TService>(
-            this ServiceCollection serviceCollection,
+        /// =================================================================================================
+        public static void AddUnique<TService>(this ServiceCollection serviceCollection,
             Func<IServiceProvider, TService> factory, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
         {
@@ -166,12 +192,124 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             if (factory.IsNull())
                 throw new ArgumentNullException(nameof(factory));
 
-            if (serviceCollection.Any(x => x.ServiceType == typeof(TService)))
-                //Remove all type of TService
-                serviceCollection.RemoveAll<TService>();
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
-            serviceCollection.Add(ServiceDescriptor.Describe(typeof(TService), factory, lifetime));
+            serviceCollection.SCAddIfHasNoAny(factory, lifetime);
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Add unique service of the type <typeparamref name="TService" />
+        ///     to current <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <remarks>
+        ///     Before add new service instance of the type <typeparamref name="TService" />, all
+        ///     previously  defined services will be removed.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <typeparam name="TService">Type of the service.</typeparam>
+        /// <param name="serviceCollection">Required. Service collection.</param>
+        /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
+        /// =================================================================================================
+        public static void AddUnique<TService>(this IServiceCollection serviceCollection,
+            ServiceLifetime lifetime)
+            where TService : class
+        {
+            if (serviceCollection.IsNull())
+                throw new ArgumentNullException(nameof(serviceCollection));
+
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
+
+            //Add new service instance
+            serviceCollection.SCAddIfHasNoAny(typeof(TService), lifetime);
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Add unique service of the type <typeparamref name="TService" />
+        ///     to current <see cref="ServiceCollection" />.
+        /// </summary>
+        /// <remarks>
+        ///     Before add new service instance of the type <typeparamref name="TService" />, all
+        ///     previously  defined services will be removed.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <typeparam name="TService">Type of the service.</typeparam>
+        /// <param name="serviceCollection">Required. Service collection.</param>
+        /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
+        /// =================================================================================================
+        public static void AddUnique<TService>(this ServiceCollection serviceCollection,
+            ServiceLifetime lifetime)
+            where TService : class
+        {
+            if (serviceCollection.IsNull())
+                throw new ArgumentNullException(nameof(serviceCollection));
+
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
+
+            //Add new service instance
+            serviceCollection.SCAddIfHasNoAny(typeof(TService), lifetime);
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Add unique service of the type <paramref name="serviceType" />
+        ///     to current <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <remarks>
+        ///     Before add new service instance of the type <paramref name="serviceType" />, all
+        ///     previously  defined services will be removed.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <param name="serviceCollection">Required. Service collection.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
+        /// =================================================================================================
+        public static void AddUnique(this IServiceCollection serviceCollection,
+            Type serviceType, ServiceLifetime lifetime)
+        {
+            if (serviceCollection.IsNull())
+                throw new ArgumentNullException(nameof(serviceCollection));
+
+            serviceCollection.SCRemoveAllIfHasAny(serviceType);
+
+            //Add new service instance
+            serviceCollection.SCAddIfHasNoAny(serviceType, lifetime);
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Add unique service of the type <paramref name="serviceType" />
+        ///     to current <see cref="ServiceCollection" />.
+        /// </summary>
+        /// <remarks>
+        ///     Before add new service instance of the type <paramref name="serviceType" />, all
+        ///     previously  defined services will be removed.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <param name="serviceCollection">Required. Service collection.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
+        /// =================================================================================================
+        public static void AddUnique(this ServiceCollection serviceCollection,
+            Type serviceType, ServiceLifetime lifetime)
+        {
+            if (serviceCollection.IsNull())
+                throw new ArgumentNullException(nameof(serviceCollection));
+
+            serviceCollection.SCRemoveAllIfHasAny(serviceType);
+
+            //Add new service instance
+            serviceCollection.SCAddIfHasNoAny(serviceType, lifetime);
         }
     }
 }

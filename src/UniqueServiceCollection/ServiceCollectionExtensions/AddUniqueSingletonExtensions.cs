@@ -17,9 +17,7 @@
 #region U S A G E S
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
-using System.Linq;
 using UniqueServiceCollection.Extensions;
 
 #endregion
@@ -48,7 +46,8 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         ///     Before add new service instance of the type <paramref name="serviceType" />,
         ///     all previously  defined services will be removed.
         /// </remarks>
-        public static void AddUnique(this IServiceCollection serviceCollection, Type serviceType, object instance)
+        public static void AddUnique(this IServiceCollection serviceCollection, 
+            Type serviceType, object instance)
         {
             if (serviceCollection.IsNull())
                 throw new ArgumentNullException(nameof(serviceCollection));
@@ -58,10 +57,8 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
 
             if (instance.IsNull())
                 throw new ArgumentNullException(nameof(instance));
-
-            if (serviceCollection.Any(x => x.ServiceType == serviceType))
-                //Remove all type of TService
-                serviceCollection.RemoveAll(serviceType);
+            
+            serviceCollection.SCRemoveAllIfHasAny(serviceType);
 
             //Add new service instance of serviceType
             serviceCollection.AddSingleton(serviceType, instance);
@@ -83,7 +80,8 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         ///     Before add new service instance of the type <paramref name="serviceType" />,
         ///     all previously  defined services will be removed.
         /// </remarks>
-        public static void AddUnique(this ServiceCollection serviceCollection, Type serviceType, object instance)
+        public static void AddUnique(this ServiceCollection serviceCollection, 
+            Type serviceType, object instance)
         {
             if (serviceCollection.IsNull())
                 throw new ArgumentNullException(nameof(serviceCollection));
@@ -94,9 +92,7 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             if (instance.IsNull())
                 throw new ArgumentNullException(nameof(instance));
 
-            if (serviceCollection.Any(x => x.ServiceType == serviceType))
-                //Remove all type of TService
-                serviceCollection.RemoveAll(serviceType);
+            serviceCollection.SCRemoveAllIfHasAny(serviceType);
 
             //Add new service instance of serviceType
             serviceCollection.AddSingleton(serviceType, instance);
@@ -127,12 +123,10 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             if (instance.IsNull())
                 throw new ArgumentNullException(nameof(instance));
 
-            if (serviceCollection.Any(x => x.ServiceType == typeof(TService)))
-                //Remove all type of TService
-                serviceCollection.RemoveAll<TService>();
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
-            serviceCollection.AddSingleton(instance);
+            serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
         }
 
         /// <summary>
@@ -160,12 +154,10 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             if (instance.IsNull())
                 throw new ArgumentNullException(nameof(instance));
 
-            if (serviceCollection.Any(x => x.ServiceType == typeof(TService)))
-                //Remove all type of TService
-                serviceCollection.RemoveAll<TService>();
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
-            serviceCollection.AddSingleton(instance);
+            serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
         }
 
         /// <summary>
@@ -187,12 +179,10 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             if (serviceCollection.IsNull())
                 throw new ArgumentNullException(nameof(serviceCollection));
 
-            if (serviceCollection.Any(x => x.ServiceType == typeof(TService)))
-                //Remove all type of TService
-                serviceCollection.RemoveAll<TService>();
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
-            serviceCollection.AddSingleton<TService>();
+            serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
         }
 
         /// <summary>
@@ -214,12 +204,10 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             if (serviceCollection.IsNull())
                 throw new ArgumentNullException(nameof(serviceCollection));
 
-            if (serviceCollection.Any(x => x.ServiceType == typeof(TService)))
-                //Remove all type of TService
-                serviceCollection.RemoveAll<TService>();
+            serviceCollection.SCRemoveAllIfHasAny<TService>();
 
             //Add new service instance
-            serviceCollection.AddSingleton<TService>();
+            serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
         }
     }
 }

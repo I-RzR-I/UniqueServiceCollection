@@ -48,7 +48,7 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
 
             foreach (var d in duplicates)
             {
-                serviceCollection.RemoveAll(d.ServiceDescriptor.ServiceType);
+                serviceCollection.SCRemoveAllIfHasAny(d.ServiceDescriptor.ServiceType);
                 serviceCollection.Add(d.ServiceDescriptor);
             }
         }
@@ -68,7 +68,7 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
 
             foreach (var d in duplicates)
             {
-                serviceCollection.RemoveAll(d.ServiceDescriptor.ServiceType);
+                serviceCollection.SCRemoveAllIfHasAny(d.ServiceDescriptor.ServiceType);
                 serviceCollection.Add(d.ServiceDescriptor);
             }
         }
@@ -82,7 +82,11 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         public static IEnumerable<DuplicateServicesDto> FindServiceDuplicate(this IServiceCollection serviceCollection)
             => serviceCollection
                 .GroupBy(x => x.ServiceType)
-                .Select(a => new DuplicateServicesDto { Count = a.Count(), ServiceDescriptor = a.FirstOrDefault() })
+                .Select(a => new DuplicateServicesDto
+                {
+                    Count = a.Count(), 
+                    ServiceDescriptor = a.FirstOrDefault()
+                })
                 .Where(x => x.Count > 1);
 
         /// <summary>
@@ -94,7 +98,11 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         public static IEnumerable<DuplicateServicesDto> FindServiceDuplicate(this ServiceCollection serviceCollection)
             => serviceCollection
                 .GroupBy(x => x.ServiceType)
-                .Select(a => new DuplicateServicesDto { Count = a.Count(), ServiceDescriptor = a.FirstOrDefault() })
+                .Select(a => new DuplicateServicesDto
+                {
+                    Count = a.Count(), 
+                    ServiceDescriptor = a.FirstOrDefault()
+                })
                 .Where(x => x.Count > 1);
 
         /// <summary>
@@ -107,7 +115,11 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             where TService : class
             => serviceCollection
                 .GroupBy(x => x.ServiceType)
-                .Select(a => new DuplicateServicesDto { Count = a.Count(), ServiceDescriptor = a.FirstOrDefault() })
+                .Select(a => new DuplicateServicesDto
+                {
+                    Count = a.Count(), 
+                    ServiceDescriptor = a.FirstOrDefault()
+                })
                 .Where(x => x.ServiceDescriptor.ServiceType == typeof(TService) && x.Count > 1);
 
         /// <summary>
@@ -120,7 +132,11 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
             where TService : class
             => serviceCollection
                 .GroupBy(x => x.ServiceType)
-                .Select(a => new DuplicateServicesDto { Count = a.Count(), ServiceDescriptor = a.FirstOrDefault() })
+                .Select(a => new DuplicateServicesDto
+                {
+                    Count = a.Count(), 
+                    ServiceDescriptor = a.FirstOrDefault()
+                })
                 .Where(x => x.ServiceDescriptor.ServiceType == typeof(TService) && x.Count > 1);
     }
 }
