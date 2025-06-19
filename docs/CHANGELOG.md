@@ -1,3 +1,27 @@
+### v**2.0.0.7916** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 19-06-2025
+* [38fb241] (RzR) -> Adjust read me and using files.
+* [95d8415] (RzR) -> Diable solution build on script execution
+* [026962d] (RzR) -> Add new version generate scripts
+* [e64ac42] (RzR) -> Remove duplicate/irelevant extensions and refactor methods
+* [3e5bc37] (RzR) -> Adjust and supply with new tests for Service Collection
+* [72b0806] (RzR) -> Add internal extension that throw exception
+* [1a97010] (RzR) -> Add tests for new public extensions
+* [cea8928] (RzR) -> Adjust public extension methods using new methods.
+* [8bc9909] (RzR) -> Add internal service collection extensions
+* [abef421] (RzR) -> Add new internal service collection extension methods
+* [02ca75f] (RzR) -> Adjust namespace for internal extensions
+* [4eb6886] (RzR) -> Adjust ServiceCollection extensions and tests
+* [361a908] (RzR) -> Add collection & rename collection/object tests
+* [97964f6] (RzR) -> Adjust code to use enumerable extensions.
+* [0946dc3] (RzR) -> Adjust tests after method rename.
+* [9368947] (RzR) -> Add new internal ServiceCollection extensions and rename existing.
+* [b5fb18f] (RzR) -> Rename internal object extensions.
+* [888c78a] (RzR) -> Add internal Enumerable/Collection extensions.
+* [9f55836] (RzR) -> Add ServiceCollection extensions and tests
+* [349a620] (RzR) -> Upgrade version for `CodeSource` package.
+* [e3aa75f] (RzR) -> Adjust maintenance year.
+* [2c261e6] (RzR) -> Move collection extensions to a separate folder.
+
 ### **v1.0.4.2241** 
 -> Fix wrong modification.<br />
 
