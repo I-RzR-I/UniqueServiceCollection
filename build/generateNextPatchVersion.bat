@@ -12,7 +12,8 @@ echo.
 set applicationName=UniqueServiceCollection
 set runVersionIncrement=y
 set runGenChangeLog=y
-set runBuild=y
+:: If runBuild > y(yes), build in release mode
+set runBuild=n 
 set runSolutionTest=y
 set runTest=y
 set runPack=y
