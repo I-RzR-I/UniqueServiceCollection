@@ -1,3 +1,15 @@
+### **v3.0.0.8109** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 09-06-2026
+* [FIX] - (RzR) -> `AddUnique<TService>(TService instance)` silently discarded the supplied instance and registered the type for container construction; it now correctly registers the provided instance via `AddSingleton(typeof(TService), instance)`.
+* [FIX] - (RzR) -> `SCHasNoAny(null)` returned `false`; a null collection now correctly reports `true` (both `Type` and generic overloads).
+* [FIX] - (RzR) -> Removed dead, boxing `IfNullThrowArgumentNullException` null-checks on the non-nullable `ServiceLifetime` enum.
+* [FIX] - (RzR) -> Corrected the `AddUnique(Type, object)` XML-doc example (was showing the factory-delegate overload).
+* [DEV] - (RzR) -> `ReplaceUnique<TService, TImplementing>(...)` — last-wins registration returning `bool` (true when an existing registration was replaced). Deliberately distinct from the BCL `TryAdd` (add-if-absent) convention.
+* [DEV] - (RzR) -> `CheckAndCleanUpAllDuplicates()` — non-generic; cleans every duplicated type in the collection.
+* [DEV] - (RzR) -> `FindExactDuplicates()` / `FindExactDuplicates<TService>()` — exact-duplicate queries (vs. the legacy `FindServiceDuplicate` overloads, retained for backward compatibility).
+* [DEV] - (RzR) -> `ValidateNoDuplicates()` — guardrail that throws `InvalidOperationException` (listing offending service types and lifetimes) when exact duplicates exist; usable in unit tests / CI startup checks.
+* [DEV] - (RzR) -> `DuplicateServiceReport` — structured report exposing all registrations for a type, the retained descriptor, and the removed duplicates (collections default to empty, never null).
+
+
 ### v**2.0.0.7916** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 19-06-2025
 * [38fb241] (RzR) -> Adjust read me and using files.
 * [95d8415] (RzR) -> Diable solution build on script execution
