@@ -2,9 +2,9 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions;
 using TestServiceCollection.Abstractions;
 using TestServiceCollection.Services;
-using UniqueServiceCollection.ServiceCollectionExtensions;
 
 #endregion
 

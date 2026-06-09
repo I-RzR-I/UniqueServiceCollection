@@ -270,6 +270,9 @@ Report/
 coverage.*
 
 # NCrunch
+*.ncrunchsolution
+*..ncrunchsolution.*
+*.ncrunchproject
 *.ncrunchproject.user
 
 # Certificates

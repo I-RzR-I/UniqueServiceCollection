@@ -21,7 +21,7 @@ using System.Linq;
 
 #endregion
 
-namespace UniqueServiceCollection.Extensions
+namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>

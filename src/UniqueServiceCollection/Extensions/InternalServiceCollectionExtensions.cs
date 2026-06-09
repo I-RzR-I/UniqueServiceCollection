@@ -25,7 +25,7 @@ using System.Linq;
 
 #endregion
 
-namespace UniqueServiceCollection.Extensions
+namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>
@@ -65,7 +65,7 @@ namespace UniqueServiceCollection.Extensions
         /// </returns>
         /// =================================================================================================
         internal static bool SCHasNoAny(this IServiceCollection serviceCollection, Type collectionType)
-            => serviceCollection.IsNotNull() && !serviceCollection.SCHasAny(collectionType);
+            => serviceCollection.IsNull() || !serviceCollection.SCHasAny(collectionType);
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -96,7 +96,7 @@ namespace UniqueServiceCollection.Extensions
         /// =================================================================================================
         internal static bool SCHasNoAny<TService>(this IServiceCollection serviceCollection)
             where TService : class
-            => serviceCollection.IsNotNull() && !serviceCollection.SCHasAny<TService>();
+            => serviceCollection.IsNull() || !serviceCollection.SCHasAny<TService>();
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>

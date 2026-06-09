@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Authors>RzR</Authors>
@@ -24,6 +23,9 @@
     <Language>en-US</Language>
     <RepositoryType>GIT</RepositoryType>
     <PackageIconUrl />
+
+    <RootNamespace>RzR.Extensions.UniqueServiceCollection</RootNamespace>
+    <AssemblyName>RzR.Extensions.UniqueServiceCollection</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -50,8 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeSource" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.32" />
+    <PackageReference Include="RzR.Core.CodeSource" Version="6.0.0.94" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.32" />
   </ItemGroup>
 

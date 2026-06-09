@@ -17,12 +17,12 @@
 #region U S A G E S
 
 using Microsoft.Extensions.DependencyInjection;
+using RzR.Extensions.UniqueServiceCollection.Extensions;
 using System;
-using UniqueServiceCollection.Extensions;
 
 #endregion
 
-namespace UniqueServiceCollection.ServiceCollectionExtensions
+namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>
@@ -43,15 +43,16 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="lifetime">(Optional) The lifetime.</param>
         /// =================================================================================================
-        public static void RegisterIfNotExist<TService, TImplementing>(this IServiceCollection serviceCollection,
+        public static IServiceCollection RegisterIfNotExist<TService, TImplementing>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
             where TImplementing : class, TService
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
-            lifetime.IfNullThrowArgumentNullException(nameof(lifetime));
 
             serviceCollection.SCAddIfHasNoAny(typeof(TService), typeof(TImplementing), lifetime);
+
+            return serviceCollection;
         }
 
         /// -------------------------------------------------------------------------------------------------
@@ -65,15 +66,15 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="lifetime">(Optional) The lifetime.</param>
         /// =================================================================================================
-        public static void RegisterIfNotExist<TService>(this IServiceCollection serviceCollection, 
+        public static IServiceCollection RegisterIfNotExist<TService>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
-            lifetime.IfNullThrowArgumentNullException(nameof(lifetime));
 
-            //Add new service instance
             serviceCollection.SCAddIfHasNoAny(typeof(TService), lifetime);
+
+            return serviceCollection;
         }
 
         /// -------------------------------------------------------------------------------------------------
@@ -88,16 +89,16 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="factory">The factory.</param>
         /// <param name="lifetime">(Optional) The lifetime.</param>
         /// =================================================================================================
-        public static void RegisterIfNotExist<TService>(this IServiceCollection serviceCollection,
+        public static IServiceCollection RegisterIfNotExist<TService>(this IServiceCollection serviceCollection,
             Func<IServiceProvider, TService> factory, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
             factory.IfNullThrowArgumentNullException(nameof(factory));
-            lifetime.IfNullThrowArgumentNullException(nameof(lifetime));
 
-            //Add new service instance
             serviceCollection.SCAddIfHasNoAny(factory, lifetime);
+
+            return serviceCollection;
         }
     }
 }

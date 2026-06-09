@@ -22,7 +22,7 @@ using ExtensionsTest.Modules.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UniqueServiceCollection.Extensions;
+using RzR.Extensions.UniqueServiceCollection.Extensions;
 
 #endregion
 
@@ -89,7 +89,7 @@ namespace ExtensionsTest.TestExtensions
             var hasAny = collection.SCHasNoAny(typeof(IServiceInvokeOne));
 
             Assert.IsNotNull(hasAny);
-            Assert.IsFalse(hasAny);
+            Assert.IsTrue(hasAny);
         }
 
         [TestMethod]

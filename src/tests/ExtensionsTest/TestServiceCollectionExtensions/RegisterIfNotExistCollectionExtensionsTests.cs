@@ -21,8 +21,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using UniqueServiceCollection.Extensions;
-using UniqueServiceCollection.ServiceCollectionExtensions;
+using RzR.Extensions.UniqueServiceCollection.Extensions;
+using RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions;
 
 namespace ExtensionsTest.TestServiceCollectionExtensions
 {
