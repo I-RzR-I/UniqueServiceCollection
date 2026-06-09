@@ -16,11 +16,11 @@
 
 #region U S A G E S
 
-using CodeSource;
+using RzR.Core.CodeSource;
 
 #endregion
 
-namespace UniqueServiceCollection.Extensions
+namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
     /// <summary>
     ///     Object extensions
@@ -34,16 +34,16 @@ namespace UniqueServiceCollection.Extensions
         /// <param name="obj">Source data</param>
         /// <returns></returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR",
-            "DomainCommonExtensions.CommonExtensions.NullExtensions.IsNull", 1)]
+            "DomainCommonExtensions.CommonExtensions.NullExtensions.IsNull", "1.0")]
         internal static bool IsNull(this object obj) => obj == null;
 
         /// <summary>
-        ///     Is null
+        ///     Is not null
         /// </summary>
         /// <param name="obj">Source data</param>
         /// <returns></returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR",
-            "DomainCommonExtensions.CommonExtensions.NullExtensions.IsNotNull", 1)]
+            "DomainCommonExtensions.CommonExtensions.NullExtensions.IsNotNull", "1.0")]
         internal static bool IsNotNull(this object obj) => !obj.IsNull();
     }
 }

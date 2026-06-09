@@ -18,7 +18,7 @@
 
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UniqueServiceCollection.Extensions;
+using RzR.Extensions.UniqueServiceCollection.Extensions;
 
 // ReSharper disable ExpressionIsAlwaysNull
 

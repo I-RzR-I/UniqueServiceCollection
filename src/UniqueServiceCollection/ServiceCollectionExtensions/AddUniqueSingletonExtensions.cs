@@ -17,12 +17,12 @@
 #region U S A G E S
 
 using Microsoft.Extensions.DependencyInjection;
+using RzR.Extensions.UniqueServiceCollection.Extensions;
 using System;
-using UniqueServiceCollection.Extensions;
 
 #endregion
 
-namespace UniqueServiceCollection.ServiceCollectionExtensions
+namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
 {
     /// <summary>
     ///     Add unique service to application service collection.
@@ -35,9 +35,8 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         ///     to current <see cref="IServiceCollection" />.
         /// </summary>
         /// <example>
-        ///     serviceCollection.AddUnique(f =>
-        ///     new TempService(f.GetRequiredService&lt;Service1&gt;(),
-        ///     f.GetRequiredService&lt;Service2&gt;()));
+        ///     var instance = new TempService();
+        ///     serviceCollection.AddUnique(typeof(ITempService), instance);
         /// </example>
         /// <param name="serviceCollection">Service collection</param>
         /// <param name="serviceType">Service type</param>
@@ -46,17 +45,18 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         ///     Before add new service instance of the type <paramref name="serviceType" />,
         ///     all previously  defined services will be removed.
         /// </remarks>
-        public static void AddUnique(this IServiceCollection serviceCollection, 
+        public static IServiceCollection AddUnique(this IServiceCollection serviceCollection,
             Type serviceType, object instance)
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
             serviceType.IfNullThrowArgumentNullException(nameof(serviceType));
             instance.IfNullThrowArgumentNullException(nameof(instance));
-            
+
             serviceCollection.SCRemoveAllIfHasAny(serviceType);
 
-            //Add new service instance of serviceType
             serviceCollection.AddSingleton(serviceType, instance);
+
+            return serviceCollection;
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         ///     Before add new service instance of the type <typeparamref name="TService" />,
         ///     all previously  defined services will be removed.
         /// </remarks>
-        public static void AddUnique<TService>(this IServiceCollection serviceCollection, TService instance)
+        public static IServiceCollection AddUnique<TService>(this IServiceCollection serviceCollection, TService instance)
             where TService : class
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
@@ -83,8 +83,9 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
-            //Add new service instance
-            serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
+            serviceCollection.AddSingleton(typeof(TService), instance);
+
+            return serviceCollection;
         }
         
         /// <summary>
@@ -100,15 +101,16 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         ///     Before add new service instance of the type <typeparamref name="TService" />,
         ///     all previously  defined services will be removed.
         /// </remarks>
-        public static void AddUnique<TService>(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddUnique<TService>(this IServiceCollection serviceCollection)
             where TService : class
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
-            //Add new service instance
             serviceCollection.SCAddToServiceCollection(typeof(TService), ServiceLifetime.Singleton);
+
+            return serviceCollection;
         }
     }
 }

@@ -17,12 +17,12 @@
 #region U S A G E S
 
 using Microsoft.Extensions.DependencyInjection;
+using RzR.Extensions.UniqueServiceCollection.Extensions;
 using System;
-using UniqueServiceCollection.Extensions;
 
 #endregion
 
-namespace UniqueServiceCollection.ServiceCollectionExtensions
+namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>
@@ -59,7 +59,7 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         /// 
         /// </example>
         /// =================================================================================================
-        public static void AddUnique<TService, TImplementing>(this IServiceCollection serviceCollection,
+        public static IServiceCollection AddUnique<TService, TImplementing>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
             where TImplementing : class, TService
@@ -68,8 +68,9 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
-            //Add new service instance
             serviceCollection.SCAddIfHasNoAny(typeof(TService), typeof(TImplementing), lifetime);
+
+            return serviceCollection;
         }
 
         /// -------------------------------------------------------------------------------------------------
@@ -99,7 +100,7 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         ///     });
         /// </example>
         /// =================================================================================================
-        public static void AddUnique<TService>(this IServiceCollection serviceCollection,
+        public static IServiceCollection AddUnique<TService>(this IServiceCollection serviceCollection,
             Func<IServiceProvider, TService> factory, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
         {
@@ -108,8 +109,9 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
-            //Add new service instance
             serviceCollection.SCAddIfHasNoAny(factory, lifetime);
+
+            return serviceCollection;
         }
 
         /// -------------------------------------------------------------------------------------------------
@@ -128,7 +130,7 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
         /// =================================================================================================
-        public static void AddUnique<TService>(this IServiceCollection serviceCollection,
+        public static IServiceCollection AddUnique<TService>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime)
             where TService : class
         {
@@ -136,8 +138,9 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
-            //Add new service instance
             serviceCollection.SCAddIfHasNoAny(typeof(TService), lifetime);
+
+            return serviceCollection;
         }
 
         /// -------------------------------------------------------------------------------------------------
@@ -156,15 +159,16 @@ namespace UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
         /// =================================================================================================
-        public static void AddUnique(this IServiceCollection serviceCollection,
+        public static IServiceCollection AddUnique(this IServiceCollection serviceCollection,
             Type serviceType, ServiceLifetime lifetime)
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
 
             serviceCollection.SCRemoveAllIfHasAny(serviceType);
 
-            //Add new service instance
             serviceCollection.SCAddIfHasNoAny(serviceType, lifetime);
+
+            return serviceCollection;
         }
     }
 }

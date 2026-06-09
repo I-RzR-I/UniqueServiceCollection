@@ -16,14 +16,15 @@
 
 #region U S A G E S
 
+using System;
 using System.Linq;
 using ExtensionsTest.Modules.Abstractions;
 using ExtensionsTest.Modules.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UniqueServiceCollection.Extensions;
-using UniqueServiceCollection.ServiceCollectionExtensions;
+using RzR.Extensions.UniqueServiceCollection.Extensions;
+using RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions;
 
 #endregion
 
@@ -147,6 +148,84 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
             var serviceOne = collection.FirstOrDefault(x => x.ServiceType == typeof(IServiceInvokeOne));
             Assert.IsNotNull(serviceOne);
             Assert.AreEqual(ServiceLifetime.Singleton, serviceOne.Lifetime);
+        }
+
+        [TestMethod]
+        public void AddUnique_Factory_RegistersWithCorrectLifetime_Singleton()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddUnique<IServiceInvoke>(_ => new ServiceInvoke(), ServiceLifetime.Singleton);
+
+            var descriptor = collection.Single(x => x.ServiceType == typeof(IServiceInvoke));
+            Assert.AreEqual(ServiceLifetime.Singleton, descriptor.Lifetime);
+            Assert.IsNotNull(descriptor.ImplementationFactory);
+        }
+
+        [TestMethod]
+        public void AddUnique_Factory_RegistersWithCorrectLifetime_Scoped()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddUnique<IServiceInvoke>(_ => new ServiceInvoke(), ServiceLifetime.Scoped);
+
+            var descriptor = collection.Single(x => x.ServiceType == typeof(IServiceInvoke));
+            Assert.AreEqual(ServiceLifetime.Scoped, descriptor.Lifetime);
+        }
+
+        [TestMethod]
+        public void AddUnique_Factory_RegistersWithCorrectLifetime_Transient()
+        {
+            var collection = new ServiceCollection();
+
+            collection.AddUnique<IServiceInvoke>(_ => new ServiceInvoke(), ServiceLifetime.Transient);
+
+            var descriptor = collection.Single(x => x.ServiceType == typeof(IServiceInvoke));
+            Assert.AreEqual(ServiceLifetime.Transient, descriptor.Lifetime);
+        }
+
+        [TestMethod]
+        public void AddUnique_Factory_ReplacesExistingRegistration()
+        {
+            var collection = new ServiceCollection();
+            collection.AddSingleton<IServiceInvoke, ServiceInvoke>();
+            collection.AddSingleton<IServiceInvoke, ServiceInvokeAlt>();
+
+            collection.AddUnique<IServiceInvoke>(_ => new ServiceInvoke());
+
+            Assert.AreEqual(1, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)));
+            var descriptor = collection.Single(x => x.ServiceType == typeof(IServiceInvoke));
+            Assert.IsNotNull(descriptor.ImplementationFactory,
+                "The factory overload must register via factory, not type.");
+        }
+
+        [TestMethod]
+        public void AddUnique_Factory_NullFactory_ThrowsArgumentNullException()
+        {
+            var collection = new ServiceCollection();
+
+            Assert.ThrowsException<ArgumentNullException>(
+                () => collection.AddUnique<IServiceInvoke>((Func<IServiceProvider, IServiceInvoke>)null));
+        }
+
+        [TestMethod]
+        public void AddUnique_Factory_NullCollection_ThrowsArgumentNullException()
+        {
+            IServiceCollection collection = null;
+
+            // ReSharper disable once ExpressionIsAlwaysNull
+            Assert.ThrowsException<ArgumentNullException>(
+                () => collection.AddUnique<IServiceInvoke>(_ => new ServiceInvoke()));
+        }
+
+        [TestMethod]
+        public void AddUnique_Factory_ReturnsServiceCollection_ForFluentChaining()
+        {
+            var collection = new ServiceCollection();
+
+            var result = collection.AddUnique<IServiceInvoke>(_ => new ServiceInvoke());
+
+            Assert.AreSame(collection, result);
         }
     }
 }

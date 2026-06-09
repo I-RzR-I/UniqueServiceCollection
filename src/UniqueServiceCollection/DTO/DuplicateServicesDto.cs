@@ -20,7 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 #endregion
 
-namespace UniqueServiceCollection.DTO
+namespace RzR.Extensions.UniqueServiceCollection.DTO
 {
     /// <summary>
     ///     Duplicate service DTO
@@ -28,12 +28,12 @@ namespace UniqueServiceCollection.DTO
     public class DuplicateServicesDto
     {
         /// <summary>
-        ///     Number of duplicate services
+        ///     Number of duplicate services found with the same ServiceType
         /// </summary>
         public int Count { get; set; }
 
         /// <summary>
-        ///     Service instance
+        ///     The service descriptor that was retained after de-duplication
         /// </summary>
         public ServiceDescriptor ServiceDescriptor { get; set; }
     }

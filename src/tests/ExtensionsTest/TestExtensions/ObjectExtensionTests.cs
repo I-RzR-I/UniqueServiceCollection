@@ -17,7 +17,7 @@
 #region U S A G E S
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UniqueServiceCollection.Extensions;
+using RzR.Extensions.UniqueServiceCollection.Extensions;
 
 #endregion
 
@@ -35,7 +35,6 @@ namespace ExtensionsTest.TestExtensions
             Assert.IsTrue(isTrue);
         }
 
-        [DataRow(10)]
         [DataRow(10)]
         [DataRow("10")]
         [TestMethod]

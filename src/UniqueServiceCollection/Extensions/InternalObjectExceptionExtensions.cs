@@ -20,7 +20,7 @@ using System;
 
 #endregion
 
-namespace UniqueServiceCollection.Extensions
+namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>
