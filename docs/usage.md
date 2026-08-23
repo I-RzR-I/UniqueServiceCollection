@@ -201,9 +201,166 @@ services.RegisterIfNotExist<IMyService>(
 
 ---
 
+## TryAddUnique — first-wins registration that reports back
+
+Class: `TryAddUniqueExtensions`
+
+Same first-wins strategy as `RegisterIfNotExist`, but returns `bool` so the caller can tell whether the
+registration actually happened. Nothing is ever removed.
+
+```csharp
+bool TryAddUnique<TService, TImplementing>(
+    this IServiceCollection serviceCollection,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+    where TService : class
+    where TImplementing : class, TService
+
+bool TryAddUnique<TService>(
+    this IServiceCollection serviceCollection,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+    where TService : class
+
+bool TryAddUnique<TService>(
+    this IServiceCollection serviceCollection,
+    Func<IServiceProvider, TService> factory,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+    where TService : class
+```
+
+```csharp
+if (!services.TryAddUnique<IMyService, MyService>())
+    logger.LogWarning("IMyService was already registered by another module.");
+```
+
+`true` means the registration was added. `false` means a registration for that service type already
+existed and nothing was added.
+
+### Why the bool matters
+
+Matching is by **service type**, exactly as with the framework's `TryAdd*`. A `false` return can
+therefore mean *a different implementation already claimed this service type*, not just *the same one
+was registered twice*. That distinction is easy to miss and occasionally important:
+
+```csharp
+services.AddAuthorization(); // framework registers a handler
+var added = services.TryAddUnique<IAuthorizationHandler, MyHandler>();
+// added == false — MyHandler was NOT registered.
+```
+
+`RegisterIfNotExist` behaves identically here but returns `IServiceCollection`, so the caller has no way
+to notice. `TryAddUnique` surfaces it.
+
+When the intent is to contribute one of several implementations resolved together as
+`IEnumerable<TService>`, use the framework's `Add*` methods instead — first-wins is the wrong strategy
+for that pattern.
+
+---
+
+## AddUniqueKeyed / TryAddUniqueKeyed — keyed registrations
+
+Class: `AddUniqueKeyedExtensions`
+
+Uniqueness is scoped to the **`(service type, service key)`** pair. Registering under one key never
+disturbs another key, and never disturbs the non-keyed registration of the same service type.
+
+> **Runtime requirement.** Keyed dependency injection arrived in
+> `Microsoft.Extensions.DependencyInjection.Abstractions` **8.0.0**. This package targets
+> `netstandard2.0` and keeps its dependency floor at 3.1.32 so existing consumers are not forced to
+> upgrade, so the keyed API is reached late-bound at runtime. On a host whose loaded abstractions
+> predate 8.0 these methods throw `PlatformNotSupportedException`.
+>
+> Keyed support comes from the DependencyInjection package rather than the runtime, so a **.NET 6 or
+> .NET 7 application referencing 8.0.0 or later is fully supported**. Only hosts taking their service
+> provider from an older shared framework ASP.NET Core 6 and 7 are not.
+
+```csharp
+IServiceCollection AddUniqueKeyed<TService, TImplementing>(
+    this IServiceCollection serviceCollection, object serviceKey,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+
+IServiceCollection AddUniqueKeyed<TService>(
+    this IServiceCollection serviceCollection, object serviceKey,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+
+IServiceCollection AddUniqueKeyed<TService>(
+    this IServiceCollection serviceCollection, object serviceKey,
+    Func<IServiceProvider, object, TService> factory,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+
+IServiceCollection AddUniqueKeyed(
+    this IServiceCollection serviceCollection,
+    Type serviceType, object serviceKey, Type implementationType,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+```
+
+```csharp
+services.AddUniqueKeyed<IStore, BlobStore>("tenantA");
+services.AddUniqueKeyed<IStore, FileStore>("tenantB", ServiceLifetime.Scoped);
+
+// Registering "tenantA" again replaces only that key.
+services.AddUniqueKeyed<IStore, TableStore>("tenantA");
+
+var provider = services.BuildServiceProvider();
+provider.GetRequiredKeyedService<IStore>("tenantA");   // TableStore
+provider.GetRequiredKeyedService<IStore>("tenantB");   // FileStore — untouched
+```
+
+The factory overload receives the key the service was resolved with:
+
+```csharp
+services.AddUniqueKeyed<IStore>("tenantA",
+    (sp, key) => new BlobStore(sp.GetRequiredService<IConfig>(), key));
+```
+
+### TryAddUniqueKeyed
+
+First-wins per key, returning `bool`. Nothing is removed.
+
+```csharp
+bool TryAddUniqueKeyed<TService, TImplementing>(
+    this IServiceCollection serviceCollection, object serviceKey,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+
+bool TryAddUniqueKeyed<TService>(
+    this IServiceCollection serviceCollection, object serviceKey,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+
+bool TryAddUniqueKeyed<TService>(
+    this IServiceCollection serviceCollection, object serviceKey,
+    Func<IServiceProvider, object, TService> factory,
+    ServiceLifetime lifetime = ServiceLifetime.Singleton)
+```
+
+```csharp
+services.TryAddUniqueKeyed<IStore, BlobStore>("tenantA");   // true
+services.TryAddUniqueKeyed<IStore, FileStore>("tenantA");   // false — key taken
+services.TryAddUniqueKeyed<IStore, FileStore>("tenantB");   // true  — different key
+```
+
+### Key rules
+
+- Keys are compared **by value** using `object.Equals`, so equal `string`, `enum` and numeric keys refer
+  to the same registration regardless of instance identity.
+- A **null** key throws `ArgumentNullException`. The container treats a null key as a conventional
+  non-keyed registration, so accepting one would let a keyed call quietly replace the non-keyed
+  registration of the same service type.
+- `KeyedService.AnyKey` throws `ArgumentException`. It is a resolution-time wildcard; registering under
+  it would shadow every keyed registration of that service type.
+
+### Keyed registrations and the cleanup methods
+
+`CheckAndCleanUpDuplicateService`, `CheckAndCleanUpAllDuplicates`, `FindExactDuplicates` and
+`ValidateNoDuplicates` **never report or remove keyed registrations**. Because this package compiles
+against abstractions 3.1.32, a keyed descriptor's key and implementation cannot be read, so every keyed
+descriptor would look identical to every other. Preserving them is the safe behaviour; keyed
+de-duplication is simply not offered.
+
+---
+
 ## Fluent chaining
 
-Every `AddUnique*` and `RegisterIfNotExist*` method returns `IServiceCollection`, so calls can be chained.
+Every `AddUnique*`, `RegisterIfNotExist*` and `AddUniqueKeyed*` method returns `IServiceCollection`, so
+calls can be chained. The `TryAdd*` and `ReplaceUnique` methods return `bool` and end a chain.
 
 ```csharp
 services
