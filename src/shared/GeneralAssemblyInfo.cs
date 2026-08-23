@@ -31,7 +31,7 @@ using System.Resources;
 [assembly: AssemblyProduct("UniqueServiceCollection")]
 [assembly: AssemblyCopyright("Copyright © 2022-2026 RzR All rights reserved.")]
 [assembly: AssemblyTrademark("® RzR™")]
-[assembly: AssemblyDescription("A product that can check and remove/avoid multiple and duplicate services injection in your current project.")]
+[assembly: AssemblyDescription("A product that can add, check and remove/avoid multiple duplicate services injection in your project.")]
 
 [assembly: AssemblyMetadata("TermsOfService", "")]
 [assembly: AssemblyMetadata("ContactUrl", "")]

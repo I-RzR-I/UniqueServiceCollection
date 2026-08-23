@@ -2,9 +2,9 @@
 //  Assembly         : RzR.Shared.Services.UniqueServiceCollection
 //  Author           : RzR
 //  Created On       : 2025-06-17 16:40
-// 
+//
 //  Last Modified By : RzR
-//  Last Modified On : 2025-06-17 19:00
+//  Last Modified On : 2026-08-23 23:53
 // ***********************************************************************
 //  <copyright file="InternalServiceCollectionExtensions.cs" company="RzR SOFT & TECH">
 //   Copyright © RzR. All rights reserved.
@@ -29,7 +29,7 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>
-    ///     An service collection extensions.
+    ///     A service collection extensions.
     /// </summary>
     /// =================================================================================================
     internal static class InternalServiceCollectionExtensions
@@ -51,7 +51,8 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         {
             collectionType.IfNullThrowArgumentNullException(nameof(collectionType));
 
-            return serviceCollection.IsNotNull() && serviceCollection.Any(x => x.ServiceType == collectionType);
+            return serviceCollection.IsNotNull()
+                   && serviceCollection.Any(x => x.ServiceType == collectionType && x.SCIsNotKeyed());
         }
 
         /// -------------------------------------------------------------------------------------------------
@@ -82,7 +83,8 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// =================================================================================================
         internal static bool SCHasAny<TService>(this IServiceCollection serviceCollection)
             where TService : class
-            => serviceCollection.IsNotNull() && serviceCollection.Any(x => x.ServiceType == typeof(TService));
+            => serviceCollection.IsNotNull()
+               && serviceCollection.Any(x => x.ServiceType == typeof(TService) && x.SCIsNotKeyed());
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -114,7 +116,7 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
             if (serviceCollection.IsNull())
                 return 0;
 
-            return serviceCollection.Count(x => x.ServiceType == typeof(TService));
+            return serviceCollection.Count(x => x.ServiceType == typeof(TService) && x.SCIsNotKeyed());
         }
 
         /// -------------------------------------------------------------------------------------------------
@@ -137,7 +139,7 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
             if (serviceCollection.IsNull())
                 return 0;
 
-            return serviceCollection.Count(x => x.ServiceType == collectionType);
+            return serviceCollection.Count(x => x.ServiceType == collectionType && x.SCIsNotKeyed());
         }
 
         /// -------------------------------------------------------------------------------------------------

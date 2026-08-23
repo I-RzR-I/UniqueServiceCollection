@@ -4,7 +4,7 @@
 //  Created On       : 2023-05-12 17:23
 //
 //  Last Modified By : RzR
-//  Last Modified On : 2026-06-08 00:00
+//  Last Modified On : 2026-08-23 23:53
 // ***********************************************************************
 //  <copyright file="MonitoringUniqueCollectionExtension.cs" company="">
 //   Copyright (c) RzR. All rights reserved.
@@ -287,6 +287,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="b">Second descriptor</param>
         private static bool AreExactDuplicates(ServiceDescriptor a, ServiceDescriptor b)
         {
+            if (a.SCIsKeyed() || b.SCIsKeyed())
+                return false;
+
             if (a.Lifetime != b.Lifetime)
                 return false;
 
