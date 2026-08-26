@@ -47,6 +47,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
+        /// </exception>
         /// <typeparam name="TService">Type of service that will be added.</typeparam>
         /// <typeparam name="TImplementing">Type of service implementation.</typeparam>
         /// <param name="serviceCollection">Required. Service collection.</param>
@@ -65,6 +68,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             where TImplementing : class, TService
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
+            lifetime.SCValidateLifetime(nameof(lifetime));
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
@@ -84,6 +88,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// </remarks>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
         /// </exception>
         /// <typeparam name="TService">Type of service that will be added.</typeparam>
         /// <param name="serviceCollection">Required. Service collection.</param>
@@ -106,6 +113,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
             factory.IfNullThrowArgumentNullException(nameof(factory));
+            lifetime.SCValidateLifetime(nameof(lifetime));
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
@@ -126,6 +134,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
+        /// </exception>
         /// <typeparam name="TService">Type of the service.</typeparam>
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
@@ -135,6 +146,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             where TService : class
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
+            lifetime.SCValidateLifetime(nameof(lifetime));
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
 
@@ -155,6 +167,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
+        /// </exception>
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
@@ -163,6 +178,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             Type serviceType, ServiceLifetime lifetime)
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
+            lifetime.SCValidateLifetime(nameof(lifetime));
 
             serviceCollection.SCRemoveAllIfHasAny(serviceType);
 

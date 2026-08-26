@@ -1,19 +1,3 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Services.ExtensionsTest
-//  Author           : RzR
-//  Created On       : 2025-06-17 18:16
-// 
-//  Last Modified By : RzR
-//  Last Modified On : 2025-06-17 21:59
-// ***********************************************************************
-//  <copyright file="ServiceCollectionExtensionTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
 #region U S A G E S
 
 using System;
@@ -36,7 +20,6 @@ namespace ExtensionsTest.TestExtensions
         {
             ServiceCollection collection = null;
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             var hasAny = collection.SCHasAny(typeof(IServiceInvokeOne));
 
             Assert.IsNotNull(hasAny);
@@ -85,7 +68,6 @@ namespace ExtensionsTest.TestExtensions
         {
             ServiceCollection collection = null;
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             var hasAny = collection.SCHasNoAny(typeof(IServiceInvokeOne));
 
             Assert.IsNotNull(hasAny);
@@ -99,7 +81,6 @@ namespace ExtensionsTest.TestExtensions
             Type collectionType = null;
 
             Assert.IsNotNull(collection);
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(() => collection.SCHasAny(collectionType));
         }
 
@@ -144,10 +125,7 @@ namespace ExtensionsTest.TestExtensions
 
             Assert.IsNull(collection);
             Assert.ThrowsException<ArgumentNullException>(() =>
-                // ReSharper disable once ExpressionIsAlwaysNull
                 collection.SCIfHasAny(typeof(IServiceInvokeOne),
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    // ReSharper disable once AssignNullToNotNullAttribute
                     () => collection.RemoveAll(typeof(IServiceInvokeOne))));
         }
 
@@ -162,7 +140,6 @@ namespace ExtensionsTest.TestExtensions
             collection.AddScoped<IServiceInvokeTwo, ServiceInvokeTwo>();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
-                // ReSharper disable once ExpressionIsAlwaysNull
                 collection.SCIfHasAny(null,
                     () => collection.RemoveAll(typeof(IServiceInvokeOne))));
         }
@@ -179,7 +156,6 @@ namespace ExtensionsTest.TestExtensions
 
             Assert.ThrowsException<ArgumentNullException>(() =>
                 collection.SCIfHasAny(typeof(IServiceInvokeOne),
-                    // ReSharper disable once AssignNullToNotNullAttribute
                     () => collection.RemoveAll(null)));
         }
 
@@ -243,7 +219,6 @@ namespace ExtensionsTest.TestExtensions
             ServiceCollection collection = null;
 
             Assert.IsNull(collection);
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(() => collection.SCRemoveAllIfHasAny<IServiceInvokeOne>());
         }
 

@@ -31,7 +31,7 @@ using System.Resources;
 [assembly: AssemblyProduct("UniqueServiceCollection")]
 [assembly: AssemblyCopyright("Copyright © 2022-2026 RzR All rights reserved.")]
 [assembly: AssemblyTrademark("® RzR™")]
-[assembly: AssemblyDescription("A product that can check and remove/avoid multiple and duplicate services injection in your current project.")]
+[assembly: AssemblyDescription("A product that can add, check and remove/avoid multiple duplicate services injection in your project.")]
 
 [assembly: AssemblyMetadata("TermsOfService", "")]
 [assembly: AssemblyMetadata("ContactUrl", "")]
@@ -40,6 +40,6 @@ using System.Resources;
 
 [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.MainAssembly)]
 
-[assembly: AssemblyVersion("3.0.0.8109")]
-[assembly: AssemblyFileVersion("3.0.0.8109")]
-[assembly: AssemblyInformationalVersion("3.0.0.8109")]
+[assembly: AssemblyVersion("3.1.0.7565")]
+[assembly: AssemblyFileVersion("3.1.0.7565")]
+[assembly: AssemblyInformationalVersion("3.1.0.7565")]

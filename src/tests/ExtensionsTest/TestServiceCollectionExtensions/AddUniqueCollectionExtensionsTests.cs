@@ -1,19 +1,3 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Services.ExtensionsTest
-//  Author           : RzR
-//  Created On       : 2025-06-18 14:39
-// 
-//  Last Modified By : RzR
-//  Last Modified On : 2025-06-18 14:42
-// ***********************************************************************
-//  <copyright file="AddUniqueCollectionExtensionsTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
 #region U S A G E S
 
 using System;
@@ -195,8 +179,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             Assert.AreEqual(1, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)));
             var descriptor = collection.Single(x => x.ServiceType == typeof(IServiceInvoke));
-            Assert.IsNotNull(descriptor.ImplementationFactory,
-                "The factory overload must register via factory, not type.");
+            Assert.IsNotNull(descriptor.ImplementationFactory);
         }
 
         [TestMethod]
@@ -213,7 +196,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
         {
             IServiceCollection collection = null;
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(
                 () => collection.AddUnique<IServiceInvoke>(_ => new ServiceInvoke()));
         }

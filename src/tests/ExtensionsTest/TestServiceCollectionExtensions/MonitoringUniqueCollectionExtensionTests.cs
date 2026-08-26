@@ -1,19 +1,3 @@
-// ***********************************************************************
-//  Assembly         : RzR.Shared.Services.ExtensionsTest
-//  Author           : RzR
-//  Created On       : 2026-06-08 22:05
-//
-//  Last Modified By : RzR
-//  Last Modified On : 2026-06-09 21:05
-// ***********************************************************************
-//  <copyright file="MonitoringUniqueCollectionExtensionTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-//
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
 #region U S A G E S
 
 using System;
@@ -36,7 +20,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
         {
             IServiceCollection collection = null;
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(
                 () => collection.CheckAndCleanUpDuplicateService<IServiceInvokeOne>());
         }
@@ -72,15 +55,13 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
         [TestMethod]
         public void CheckAndCleanUpDuplicateService_DistinctImplementations_BothPreserved()
         {
-            // Intentional multi-registration — ServiceInvoke and ServiceInvokeAlt are different impls.
             var collection = new ServiceCollection();
             collection.AddSingleton<IServiceInvoke, ServiceInvoke>();
             collection.AddSingleton<IServiceInvoke, ServiceInvokeAlt>();
 
             collection.CheckAndCleanUpDuplicateService<IServiceInvoke>();
 
-            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)),
-                "Distinct implementations must not be removed by cleanup.");
+            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)));
         }
 
         [TestMethod]
@@ -92,8 +73,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             collection.CheckAndCleanUpDuplicateService<IServiceInvoke>();
 
-            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)),
-                "Same implementation registered with different lifetimes are not duplicates.");
+            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)));
         }
 
         [TestMethod]
@@ -113,7 +93,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
         {
             IServiceCollection collection = null;
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(
                 () => collection.CheckAndCleanUpAllDuplicates());
         }
@@ -142,8 +121,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             collection.CheckAndCleanUpAllDuplicates();
 
-            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)),
-                "Distinct implementations must not be removed.");
+            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)));
         }
 
         [TestMethod]
@@ -231,8 +209,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             var reports = collection.FindExactDuplicates().ToList();
 
-            Assert.AreEqual(0, reports.Count,
-                "Distinct implementations must not be flagged as duplicates.");
+            Assert.AreEqual(0, reports.Count);
         }
 
         [TestMethod]
@@ -240,7 +217,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
         {
             IServiceCollection collection = null;
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(
                 () => collection.FindExactDuplicates().ToList());
         }
@@ -279,8 +255,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             var report = collection.FindExactDuplicates<IServiceInvoke>();
 
-            Assert.IsNull(report,
-                "Distinct implementations must not be flagged as duplicates.");
+            Assert.IsNull(report);
         }
 
         [TestMethod]
@@ -307,14 +282,12 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             collection.CheckAndCleanUpDuplicateService<IServiceInvoke>();
 
-            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)),
-                "Different instances registered for the same type are not duplicates.");
+            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)));
         }
 
         [TestMethod]
         public void CheckAndCleanUpDuplicateService_SameFactoryDelegate_CollapseToOne()
         {
-            // Same delegate reference → AreExactDuplicates matches via ReferenceEquals(ImplementationFactory).
             Func<IServiceProvider, IServiceInvoke> factory = _ => new ServiceInvoke();
             var collection = new ServiceCollection();
             collection.AddSingleton<IServiceInvoke>(factory);
@@ -324,30 +297,24 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             collection.CheckAndCleanUpDuplicateService<IServiceInvoke>();
 
-            Assert.AreEqual(1, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)),
-                "Two registrations sharing the same factory delegate reference must collapse to one.");
+            Assert.AreEqual(1, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)));
         }
 
         [TestMethod]
         public void CheckAndCleanUpDuplicateService_DifferentFactoryDelegates_BothPreserved()
         {
-            // Two distinct lambdas are different delegate objects → not duplicates.
             var collection = new ServiceCollection();
             collection.AddSingleton<IServiceInvoke>(_ => new ServiceInvoke());
             collection.AddSingleton<IServiceInvoke>(_ => new ServiceInvoke());
 
             collection.CheckAndCleanUpDuplicateService<IServiceInvoke>();
 
-            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)),
-                "Two registrations with distinct factory delegates must not be removed.");
+            Assert.AreEqual(2, collection.Count(x => x.ServiceType == typeof(IServiceInvoke)));
         }
 
         [TestMethod]
         public void FindServiceDuplicate_VsExact_ContrastTest_DistinctImplementations()
         {
-            // FindServiceDuplicate (count-based legacy) reports any type registered more than once.
-            // FindExactDuplicates (identity-based) only reports genuinely identical registrations.
-            // With two DISTINCT implementations, only the legacy API returns a result.
             var collection = new ServiceCollection();
             collection.AddSingleton<IServiceInvoke, ServiceInvoke>();
             collection.AddSingleton<IServiceInvoke, ServiceInvokeAlt>();
@@ -355,10 +322,8 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
             var legacyDuplicates = collection.FindServiceDuplicate<IServiceInvoke>().ToList();
             var exactDuplicates = collection.FindExactDuplicates().ToList();
 
-            Assert.AreEqual(1, legacyDuplicates.Count,
-                "Legacy FindServiceDuplicate must flag any service type registered more than once.");
-            Assert.AreEqual(0, exactDuplicates.Count,
-                "FindExactDuplicates must return empty when all registrations have distinct implementations.");
+            Assert.AreEqual(1, legacyDuplicates.Count);
+            Assert.AreEqual(0, exactDuplicates.Count);
         }
 
         [TestMethod]
@@ -366,7 +331,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
         {
             IServiceCollection collection = null;
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(
                 () => collection.ValidateNoDuplicates());
         }
@@ -380,7 +344,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             var result = collection.ValidateNoDuplicates();
 
-            Assert.AreSame(collection, result, "Must return the same collection instance for fluent chaining.");
+            Assert.AreSame(collection, result);
         }
 
         [TestMethod]
@@ -397,8 +361,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
         [TestMethod]
         public void ValidateNoDuplicates_DistinctImplementations_DoesNotThrow()
         {
-            // Two distinct implementations of the same interface is intentional multi-registration,
-            // not a duplicate — ValidateNoDuplicates must not throw.
             var collection = new ServiceCollection();
             collection.AddSingleton<IServiceInvoke, ServiceInvoke>();
             collection.AddSingleton<IServiceInvoke, ServiceInvokeAlt>();
@@ -431,12 +393,11 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
             try
             {
                 collection.ValidateNoDuplicates();
-                Assert.Fail("Expected InvalidOperationException was not thrown.");
+                Assert.Fail();
             }
             catch (InvalidOperationException ex)
             {
-                StringAssert.Contains(ex.Message, nameof(IServiceInvoke),
-                    "Exception message must include the affected service type name.");
+                StringAssert.Contains(ex.Message, nameof(IServiceInvoke));
             }
         }
     }

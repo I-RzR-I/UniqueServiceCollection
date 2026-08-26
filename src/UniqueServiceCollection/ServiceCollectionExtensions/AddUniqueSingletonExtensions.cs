@@ -38,6 +38,12 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         ///     var instance = new TempService();
         ///     serviceCollection.AddUnique(typeof(ITempService), instance);
         /// </example>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     Thrown when <paramref name="instance" /> is not an instance of <paramref name="serviceType" />.
+        /// </exception>
         /// <param name="serviceCollection">Service collection</param>
         /// <param name="serviceType">Service type</param>
         /// <param name="instance">Service instance</param>
@@ -51,6 +57,13 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
             serviceType.IfNullThrowArgumentNullException(nameof(serviceType));
             instance.IfNullThrowArgumentNullException(nameof(instance));
+
+            if (!serviceType.IsInstanceOfType(instance))
+            {
+                throw new ArgumentException(
+                    $"Instance of type '{instance.GetType()}' cannot be converted to service type '{serviceType}'.",
+                    nameof(instance));
+            }
 
             serviceCollection.SCRemoveAllIfHasAny(serviceType);
 

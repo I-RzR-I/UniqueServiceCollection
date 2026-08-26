@@ -56,6 +56,9 @@ services.ValidateNoDuplicates();
 | --- | --- | --- |
 | `AddUnique*` | Remove all existing registrations for the type, then add the new one | Last registration |
 | `RegisterIfNotExist*` | Add only when no registration for the type exists yet | First registration |
+| `TryAddUnique*` | Add only when no registration for the type exists yet, and report whether it happened | First registration |
+| `AddUniqueKeyed*` | Remove existing registrations for the `(type, key)` pair, then add the new one | Last registration, per key |
+| `TryAddUniqueKeyed*` | Add only when the `(type, key)` pair is unregistered, and report whether it happened | First registration, per key |
 
 Choose `AddUnique*` when you want to guarantee a specific implementation is used regardless of registration order. Choose `RegisterIfNotExist*` when you want a default that callers can override by registering first.
 
@@ -71,6 +74,9 @@ Intentional multi-registration of **distinct** implementations of the same inter
 - `AddUnique<TService>(factory)` — factory registration, configurable lifetime
 - `AddUnique<TService>(instance)` — singleton instance registration
 - `RegisterIfNotExist<TService, TImplementing>()` — first-wins registration
+- `TryAddUnique<TService, TImplementing>()` — first-wins registration returning `bool`
+- `AddUniqueKeyed<TService, TImplementing>(key)` — keyed registration, unique per `(type, key)`
+- `TryAddUniqueKeyed<TService, TImplementing>(key)` — first-wins keyed registration returning `bool`
 - `ReplaceUnique<TService, TImplementing>()` — replace and report whether anything was replaced
 - `CheckAndCleanUpDuplicateService<TService>()` — remove exact duplicates for one type
 - `CheckAndCleanUpAllDuplicates()` — remove exact duplicates across all types

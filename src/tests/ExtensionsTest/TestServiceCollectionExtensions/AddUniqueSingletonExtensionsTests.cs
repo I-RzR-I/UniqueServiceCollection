@@ -1,19 +1,3 @@
-// ***********************************************************************
-//  Assembly         : RzR.Shared.Services.ExtensionsTest
-//  Author           : RzR
-//  Created On       : 2026-06-08 22:05
-//
-//  Last Modified By : RzR
-//  Last Modified On : 2026-06-09 21:05
-// ***********************************************************************
-//  <copyright file="AddUniqueSingletonExtensionsTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-//
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
 #region U S A G E S
 
 using System;
@@ -41,8 +25,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             var descriptor = collection.Single(x => x.ServiceType == typeof(IServiceInvoke));
             Assert.AreEqual(ServiceLifetime.Singleton, descriptor.Lifetime);
-            Assert.AreSame(instance, descriptor.ImplementationInstance,
-                "The passed instance must be registered, not a new container-constructed one.");
+            Assert.AreSame(instance, descriptor.ImplementationInstance);
         }
 
         [TestMethod]
@@ -65,7 +48,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
             IServiceCollection collection = null;
             var instance = new ServiceInvoke();
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(
                 () => collection.AddUnique<IServiceInvoke>(instance));
         }
@@ -122,7 +104,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
         {
             IServiceCollection collection = null;
 
-            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.ThrowsException<ArgumentNullException>(
                 () => collection.AddUnique(typeof(IServiceInvoke), new ServiceInvoke()));
         }
@@ -187,8 +168,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
             var provider = collection.BuildServiceProvider();
             var resolved = provider.GetRequiredService<IServiceInvoke>();
 
-            Assert.AreSame(instance, resolved,
-                "The container must return the exact registered instance, not a new one.");
+            Assert.AreSame(instance, resolved);
         }
 
         [TestMethod]
@@ -201,8 +181,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
             var provider = collection.BuildServiceProvider();
             var resolved = provider.GetRequiredService<IServiceInvoke>();
 
-            Assert.AreSame(instance, resolved,
-                "The container must return the exact registered instance, not a new one.");
+            Assert.AreSame(instance, resolved);
         }
     }
 }

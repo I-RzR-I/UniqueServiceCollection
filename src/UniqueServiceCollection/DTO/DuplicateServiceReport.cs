@@ -31,12 +31,15 @@ namespace RzR.Extensions.UniqueServiceCollection.DTO
     ///     A non-empty <see cref="DuplicateRegistrations" /> list means that genuinely identical
     ///     registrations (same ServiceType, ImplementationType/Instance/Factory, and Lifetime) existed
     ///     and were removed. <see cref="RetainedDescriptor" /> is the descriptor that survived.
+    ///     Keyed registrations never appear in any member of this report.
     ///     Collection properties default to empty arrays so consumers can enumerate safely without null checks.
     /// </remarks>
     public class DuplicateServiceReport
     {
         /// <summary>
-        ///     All registrations that existed for the service type at the time the report was generated.
+        ///     All non-keyed registrations that existed for the service type at the time the report was
+        ///     generated. Keyed registrations are excluded: they are never analysed, retained or removed,
+        ///     so listing them here would suggest they took part in the duplicate analysis.
         ///     Never null; defaults to an empty array.
         /// </summary>
         public IReadOnlyList<ServiceDescriptor> AllRegistrations { get; set; } = Array.Empty<ServiceDescriptor>();
