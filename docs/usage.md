@@ -346,14 +346,21 @@ services.TryAddUniqueKeyed<IStore, FileStore>("tenantB");   // true  — differe
   registration of the same service type.
 - `KeyedService.AnyKey` throws `ArgumentException`. It is a resolution-time wildcard; registering under
   it would shadow every keyed registration of that service type.
+- An **existing** `KeyedService.AnyKey` registration of the same service type already answers every key.
+  `TryAddUniqueKeyed` therefore returns `false` and adds nothing — the key is already served, and adding
+  an exact-key registration would silently change what it resolves to. `AddUniqueKeyed` does add, and
+  wins for that one key: the wildcard registration is **not** removed, because removing it would destroy
+  resolution for every other key. Uniqueness is guaranteed for the exact key only.
 
 ### Keyed registrations and the cleanup methods
 
-`CheckAndCleanUpDuplicateService`, `CheckAndCleanUpAllDuplicates`, `FindExactDuplicates` and
-`ValidateNoDuplicates` **never report or remove keyed registrations**. Because this package compiles
-against abstractions 3.1.32, a keyed descriptor's key and implementation cannot be read, so every keyed
-descriptor would look identical to every other. Preserving them is the safe behaviour; keyed
-de-duplication is simply not offered.
+`CheckAndCleanUpDuplicateService`, `CheckAndCleanUpAllDuplicates`, `FindExactDuplicates`,
+`FindServiceDuplicate` and `ValidateNoDuplicates` **never report, count or remove keyed registrations**.
+A keyed registration occupies its own `(ServiceType, ServiceKey)` resolution slot, so it is not a
+duplicate of the non-keyed registration nor of a registration under a different key; reporting one would
+be a false positive. Keyed descriptors are filtered out before the analysis runs and therefore never
+appear in a `DuplicateServiceReport` — not as `RetainedDescriptor`, not in `DuplicateRegistrations`, and
+not in `AllRegistrations`. De-duplication across keyed registrations is not currently offered.
 
 ---
 
