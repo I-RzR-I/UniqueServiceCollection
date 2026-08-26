@@ -1,3 +1,18 @@
+### **v3.1.0.7565** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 26-08-2026
+* [DEV] - (RzR) -> `TryAddUnique*` — first-wins registration returning `bool` (true when added).
+* [DEV] - (RzR) -> `AddUniqueKeyed*` — keyed registration, unique per `(ServiceType, ServiceKey)`; sibling keys and the non-keyed registration are untouched.
+* [DEV] - (RzR) -> `TryAddUniqueKeyed*` — first-wins per key, returning `bool`.
+* [DEV] - (RzR) -> Keyed API is late-bound, so the package stays `netstandard2.0` on the `Abstractions 3.1.32` floor; throws `PlatformNotSupportedException` on hosts below 8.0.
+* [FIX] - (RzR) -> Keyed registrations were treated as duplicates of one another and silently removed by the cleanup methods.
+* [FIX] - (RzR) -> `AddUnique*` / `RegisterIfNotExist*` silently registered nothing when only a keyed registration of the type existed.
+* [FIX] - (RzR) -> Keyed detection read accessors that throw on `Abstractions 8.0.0`/`8.0.1`; now reads `ServiceDescriptor.IsKeyedService`.
+* [FIX] - (RzR) -> `ValidateNoDuplicates()` could report a keyed registration as the offender, with the wrong lifetime.
+* [FIX] - (RzR) -> `ReplaceUnique()` returned `true` when only a keyed registration existed and nothing had been replaced.
+* [FIX] - (RzR) -> **Behaviour change.** `ServiceLifetime` is validated before mutation everywhere; an undefined value now throws `ArgumentOutOfRangeException` at registration instead of after removing the existing registration (or, on the factory path, at `BuildServiceProvider()`).
+* [FIX] - (RzR) -> **Behaviour change.** `AddUnique(Type, object)` and `AddUniqueKeyed(Type, ...)` reject non-assignable implementations and asymmetric open-generic pairs at the call site.
+* [FIX] - (RzR) -> **Behaviour change.** `FindServiceDuplicate*` ignores keyed registrations, so a keyed + non-keyed pair is no longer a false duplicate; counts shrink and keyed-only types drop out.
+* [FIX] - (RzR) -> **Behaviour change.** `TryAddUniqueKeyed*` returns `false` when a `KeyedService.AnyKey` registration already serves the key. `AddUniqueKeyed*` unchanged.
+
 ### **v3.0.0.8109** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 09-06-2026
 * [FIX] - (RzR) -> `AddUnique<TService>(TService instance)` silently discarded the supplied instance and registered the type for container construction; it now correctly registers the provided instance via `AddSingleton(typeof(TService), instance)`.
 * [FIX] - (RzR) -> `SCHasNoAny(null)` returned `false`; a null collection now correctly reports `true` (both `Type` and generic overloads).
