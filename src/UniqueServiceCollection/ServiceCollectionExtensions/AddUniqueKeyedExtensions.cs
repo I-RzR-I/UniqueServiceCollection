@@ -37,10 +37,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         ///     Add unique keyed service of the type <typeparamref name="TService" /> with its
         ///     implementation on <typeparamref name="TImplementing" /> under <paramref name="serviceKey" />.
         /// </summary>
-        /// <remarks>
-        ///     Any previous registration of <typeparamref name="TService" /> under the same key is removed
-        ///     first. Other keys and the non-keyed registration are left untouched.
-        /// </remarks>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is null.
         /// </exception>
@@ -168,7 +164,13 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         ///     Thrown when one or more required arguments are null.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     Thrown when <paramref name="serviceKey" /> is the resolution-time wildcard key.
+        ///     Thrown when <paramref name="serviceKey" /> is the resolution-time wildcard key, when exactly
+        ///     one of <paramref name="serviceType" /> and <paramref name="implementationType" /> is an open
+        ///     generic type definition, or when <paramref name="implementationType" /> is not assignable to
+        ///     <paramref name="serviceType" />.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
         /// </exception>
         /// <exception cref="PlatformNotSupportedException">
         ///     Thrown when the loaded DependencyInjection.Abstractions predates 8.0.
@@ -193,6 +195,23 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             InternalKeyedSupport.SCValidateServiceKey(serviceKey, nameof(serviceKey));
             lifetime.SCValidateLifetime(nameof(lifetime));
 
+            if (serviceType.IsGenericTypeDefinition != implementationType.IsGenericTypeDefinition)
+            {
+                throw new ArgumentException(
+                    $"Implementation type '{implementationType}' cannot be converted to service type '{serviceType}': " +
+                    "an open generic service type requires an open generic implementation type, and vice versa.",
+                    nameof(implementationType));
+            }
+
+            if (!serviceType.IsGenericTypeDefinition
+                && !implementationType.IsGenericTypeDefinition
+                && !serviceType.IsAssignableFrom(implementationType))
+            {
+                throw new ArgumentException(
+                    $"Implementation type '{implementationType}' cannot be converted to service type '{serviceType}'.",
+                    nameof(implementationType));
+            }
+
             serviceCollection.SCRemoveAllKeyed(serviceType, serviceKey);
             serviceCollection.Add(InternalKeyedSupport.SCDescribeKeyed(
                 serviceType, serviceKey, implementationType, lifetime));
@@ -205,11 +224,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         ///     Registers <typeparamref name="TImplementing" /> under <paramref name="serviceKey" /> when no
         ///     registration of <typeparamref name="TService" /> exists for that key (first-wins).
         /// </summary>
-        /// <remarks>
-        ///     Nothing is ever removed. A registration under a different key, or the non-keyed registration
-        ///     of the same service type, does not block the add — only an existing registration under the
-        ///     same key does.
-        /// </remarks>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is null.
         /// </exception>
@@ -225,7 +239,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceKey">Required. The registration key.</param>
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
-        ///     True when the registration was added; false when one already existed for that key.
+        ///     True when the registration was added; false when the key is already served, either by an
+        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of the
+        ///     same service type.
         /// </returns>
         /// =================================================================================================
         public static bool TryAddUniqueKeyed<TService, TImplementing>(this IServiceCollection serviceCollection,
@@ -238,7 +254,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             InternalKeyedSupport.SCValidateServiceKey(serviceKey, nameof(serviceKey));
             lifetime.SCValidateLifetime(nameof(lifetime));
 
-            if (serviceCollection.SCHasAnyKeyed(typeof(TService), serviceKey))
+            if (serviceCollection.SCHasKeySatisfied(typeof(TService), serviceKey))
                 return false;
 
             serviceCollection.Add(InternalKeyedSupport.SCDescribeKeyed(
@@ -266,7 +282,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceKey">Required. The registration key.</param>
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
-        ///     True when the registration was added; false when one already existed for that key.
+        ///     True when the registration was added; false when the key is already served, either by an
+        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of the
+        ///     same service type.
         /// </returns>
         /// =================================================================================================
         public static bool TryAddUniqueKeyed<TService>(this IServiceCollection serviceCollection,
@@ -278,7 +296,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             InternalKeyedSupport.SCValidateServiceKey(serviceKey, nameof(serviceKey));
             lifetime.SCValidateLifetime(nameof(lifetime));
 
-            if (serviceCollection.SCHasAnyKeyed(typeof(TService), serviceKey))
+            if (serviceCollection.SCHasKeySatisfied(typeof(TService), serviceKey))
                 return false;
 
             serviceCollection.Add(InternalKeyedSupport.SCDescribeKeyed(
@@ -310,7 +328,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// </param>
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
-        ///     True when the registration was added; false when one already existed for that key.
+        ///     True when the registration was added; false when the key is already served, either by an
+        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of the
+        ///     same service type.
         /// </returns>
         /// =================================================================================================
         public static bool TryAddUniqueKeyed<TService>(this IServiceCollection serviceCollection,
@@ -324,7 +344,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             factory.IfNullThrowArgumentNullException(nameof(factory));
             lifetime.SCValidateLifetime(nameof(lifetime));
 
-            if (serviceCollection.SCHasAnyKeyed(typeof(TService), serviceKey))
+            if (serviceCollection.SCHasKeySatisfied(typeof(TService), serviceKey))
                 return false;
 
             serviceCollection.Add(InternalKeyedSupport.SCDescribeKeyed(

@@ -67,6 +67,54 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
             => serviceCollection.IsNotNull()
                && serviceCollection.Any(x => x.SCMatchesKeyed(serviceType, serviceKey));
 
+        /// <summary>
+        ///     A ServiceDescriptor extension method that queries whether the descriptor already
+        ///     satisfies resolution of the given service type under the given key, either by an exact
+        ///     key match or by being registered under the resolution-time wildcard key.
+        /// </summary>
+        /// <remarks>
+        ///     The wildcard key is compared by reference, consistent with
+        ///     <see cref="InternalKeyedSupport.SCValidateServiceKey" />: it is a singleton sentinel and
+        ///     an
+        ///     equality comparison could be satisfied by an unrelated key. When the runtime exposes no
+        ///     wildcard key the comparison is skipped, so a partial bind cannot dereference null.
+        /// 
+        /// </remarks>
+        /// <param name="descriptor">The descriptor to act on.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="serviceKey">The registration key.</param>
+        /// <returns>
+        ///     True when resolving <paramref name="serviceType" /> under <paramref name="serviceKey" />
+        ///     would already be served by this descriptor.
+        /// </returns>
+        internal static bool SCSatisfiesKeyed(this ServiceDescriptor descriptor, Type serviceType, object serviceKey)
+        {
+            if (descriptor.SCMatchesKeyed(serviceType, serviceKey))
+                return true;
+
+            var anyKey = InternalKeyedSupport.AnyKey;
+
+            return anyKey.IsNotNull()
+                   && descriptor.SCIsKeyed()
+                   && descriptor.ServiceType == serviceType
+                   && ReferenceEquals(descriptor.SCGetServiceKey(), anyKey);
+        }
+
+        /// <summary>
+        ///     An IServiceCollection extension method that queries whether resolution of the given
+        ///     service type under the given key is already served, counting a wildcard registration as a
+        ///     match.
+        /// </summary>
+        /// <param name="serviceCollection">The serviceCollection to act on.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="serviceKey">The registration key.</param>
+        /// <returns>
+        ///     True if any, false if not.
+        /// </returns>
+        internal static bool SCHasKeySatisfied(this IServiceCollection serviceCollection, Type serviceType, object serviceKey)
+            => serviceCollection.IsNotNull()
+               && serviceCollection.Any(x => x.SCSatisfiesKeyed(serviceType, serviceKey));
+
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that counts registrations for the given service type
@@ -102,24 +150,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                 if (serviceCollection[i].SCMatchesKeyed(serviceType, serviceKey))
                     serviceCollection.RemoveAt(i);
             }
-        }
-
-        /// -------------------------------------------------------------------------------------------------
-        /// <summary>
-        ///     An IServiceCollection extension method that validates a lifetime value.
-        /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///     Thrown when the lifetime is outside the accepted range.
-        /// </exception>
-        /// <param name="lifetime">The lifetime.</param>
-        /// <param name="paramName">Name of the parameter.</param>
-        /// =================================================================================================
-        internal static void SCValidateLifetime(this ServiceLifetime lifetime, string paramName)
-        {
-            if (lifetime != ServiceLifetime.Singleton
-                && lifetime != ServiceLifetime.Scoped
-                && lifetime != ServiceLifetime.Transient)
-                lifetime.ThrowArgumentOutOfRangeException(paramName);
         }
     }
 }

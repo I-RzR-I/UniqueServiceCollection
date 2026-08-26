@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using ExtensionsTest.Modules.Abstractions;
+using ExtensionsTest.Modules.Enums;
 using ExtensionsTest.Modules.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,12 +18,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
     [TestClass]
     public class AddUniqueKeyedExtensionsTests
     {
-        private enum Tenant
-        {
-            First,
-            Second
-        }
-
         [TestMethod]
         public void AddUniqueKeyed_FirstRegistration_RegistersWithKeyAndImplementation()
         {
@@ -71,8 +66,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
             collection.AddUniqueKeyed<IServiceInvoke, ServiceInvokeAlt>("tenantA");
 
             Assert.AreEqual(2, collection.Count);
-            Assert.AreEqual(1, collection.Count(x => !x.IsKeyedService),
-                "The non-keyed registration must survive a keyed add.");
+            Assert.AreEqual(1, collection.Count(x => !x.IsKeyedService));
         }
 
         [TestMethod]

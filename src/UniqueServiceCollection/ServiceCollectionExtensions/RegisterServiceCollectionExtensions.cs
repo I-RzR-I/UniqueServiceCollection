@@ -38,6 +38,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
+        /// </exception>
         /// <typeparam name="TService">Type of the service.</typeparam>
         /// <typeparam name="TImplementing">Type of the implementing.</typeparam>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
@@ -49,6 +52,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             where TImplementing : class, TService
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
+            lifetime.SCValidateLifetime(nameof(lifetime));
 
             serviceCollection.SCAddIfHasNoAny(typeof(TService), typeof(TImplementing), lifetime);
 
@@ -62,6 +66,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
+        /// </exception>
         /// <typeparam name="TService">Type of the service.</typeparam>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="lifetime">(Optional) The lifetime.</param>
@@ -71,6 +78,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             where TService : class
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
+            lifetime.SCValidateLifetime(nameof(lifetime));
 
             serviceCollection.SCAddIfHasNoAny(typeof(TService), lifetime);
 
@@ -84,6 +92,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
+        /// </exception>
         /// <typeparam name="TService">Type of the service.</typeparam>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="factory">The factory.</param>
@@ -95,6 +106,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
             factory.IfNullThrowArgumentNullException(nameof(factory));
+            lifetime.SCValidateLifetime(nameof(lifetime));
 
             serviceCollection.SCAddIfHasNoAny(factory, lifetime);
 

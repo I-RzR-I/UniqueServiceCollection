@@ -1,26 +1,8 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Services.ExtensionsTest
-//  Author           : RzR
-//  Created On       : 2025-06-17 23:35
-// 
-//  Last Modified By : RzR
-//  Last Modified On : 2025-06-17 23:38
-// ***********************************************************************
-//  <copyright file="EnumerableExtensionsTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
 #region U S A G E S
 
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RzR.Extensions.UniqueServiceCollection.Extensions;
-
-// ReSharper disable ExpressionIsAlwaysNull
 
 #endregion
 

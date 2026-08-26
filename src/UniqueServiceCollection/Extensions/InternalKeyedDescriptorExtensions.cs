@@ -17,6 +17,7 @@
 #region U S A G E S
 
 using Microsoft.Extensions.DependencyInjection;
+using RzR.Extensions.UniqueServiceCollection.Helpers;
 
 // ReSharper disable InconsistentNaming
 
@@ -43,10 +44,7 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// </returns>
         /// =================================================================================================
         internal static bool SCIsKeyed(this ServiceDescriptor descriptor)
-            => descriptor.IsNotNull()
-               && descriptor.ImplementationType.IsNull()
-               && descriptor.ImplementationInstance.IsNull()
-               && descriptor.ImplementationFactory.IsNull();
+            => descriptor.IsNotNull() && InternalKeyedSupport.SCIsKeyedDescriptor(descriptor);
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>

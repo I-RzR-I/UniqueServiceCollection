@@ -1,19 +1,3 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Services.ExtensionsTest
-//  Author           : RzR
-//  Created On       : 2025-06-18 16:12
-// 
-//  Last Modified By : RzR
-//  Last Modified On : 2025-06-18 16:12
-// ***********************************************************************
-//  <copyright file="RegisterIfNotExistCollectionExtensionsTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
 using ExtensionsTest.Modules.Abstractions;
 using ExtensionsTest.Modules.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,7 +37,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             Assert.IsNull(collection);
             Assert.ThrowsException<ArgumentNullException>(
-                // ReSharper disable once ExpressionIsAlwaysNull
                 () => collection.RegisterIfNotExist<IServiceInvoke, ServiceInvoke>());
         }
 
@@ -193,7 +176,6 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
 
             Assert.IsNull(collection);
             Assert.ThrowsException<ArgumentNullException>(
-                // ReSharper disable once ExpressionIsAlwaysNull
                 () => collection.RegisterIfNotExist<IServiceInvoke, ServiceInvoke>());
         }
 

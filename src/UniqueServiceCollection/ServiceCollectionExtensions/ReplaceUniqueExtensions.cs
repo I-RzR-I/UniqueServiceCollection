@@ -18,7 +18,6 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using RzR.Extensions.UniqueServiceCollection.Extensions;
-using System.Linq;
 
 #endregion
 
@@ -38,6 +37,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         ///     Removes all existing registrations for <typeparamref name="TService" /> and registers
         ///     <typeparamref name="TImplementing" /> as the sole implementation (last-wins / replace semantics).
         /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
+        /// </exception>
         /// <typeparam name="TService">Service type.</typeparam>
         /// <typeparam name="TImplementing">Implementation type.</typeparam>
         /// <param name="serviceCollection">Service collection.</param>
@@ -52,8 +54,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             where TImplementing : class, TService
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
+            lifetime.SCValidateLifetime(nameof(lifetime));
 
-            var replaced = serviceCollection.Any(x => x.ServiceType == typeof(TService));
+            var replaced = serviceCollection.SCHasAny<TService>();
 
             serviceCollection.SCRemoveAllIfHasAny<TService>();
             serviceCollection.SCAddIfHasNoAny(typeof(TService), typeof(TImplementing), lifetime);

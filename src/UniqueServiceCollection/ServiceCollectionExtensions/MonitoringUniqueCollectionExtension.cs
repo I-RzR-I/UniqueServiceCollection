@@ -103,6 +103,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
 
             return serviceCollection
+                .Where(x => x.SCIsNotKeyed())
                 .GroupBy(x => x.ServiceType)
                 .Where(g => g.Count() > 1)
                 .Select(g => new DuplicateServicesDto
@@ -129,7 +130,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
 
             return serviceCollection
-                .Where(x => x.ServiceType == typeof(TService))
+                .Where(x => x.ServiceType == typeof(TService) && x.SCIsNotKeyed())
                 .GroupBy(x => x.ServiceType)
                 .Where(g => g.Count() > 1)
                 .Select(g => new DuplicateServicesDto
@@ -239,14 +240,23 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// </summary>
         /// <param name="serviceType">The service type all registrations belong to</param>
         /// <param name="registrations">All registrations for that service type</param>
+        /// <remarks>
+        ///     Keyed registrations are removed before the analysis starts, so they can never surface as
+        ///     <see cref="DuplicateServiceReport.RetainedDescriptor" />, in
+        ///     <see cref="DuplicateServiceReport.DuplicateRegistrations" />, or in
+        ///     <see cref="DuplicateServiceReport.AllRegistrations" />. Filtering here rather than only
+        ///     inside the comparison keeps every caller of this method keyed-blind.
+        /// </remarks>
         private static DuplicateServiceReport BuildDuplicateReportForGroup(
             Type serviceType,
             IList<ServiceDescriptor> registrations)
         {
+            var candidates = registrations.Where(x => x.SCIsNotKeyed()).ToList();
+
             var distinct = new List<ServiceDescriptor>();
             var duplicates = new List<ServiceDescriptor>();
 
-            foreach (var descriptor in registrations)
+            foreach (var descriptor in candidates)
             {
                 if (distinct.Any(d => AreExactDuplicates(d, descriptor)))
                     duplicates.Add(descriptor);
@@ -256,7 +266,7 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
 
             return new DuplicateServiceReport
             {
-                AllRegistrations = registrations.ToList(),
+                AllRegistrations = candidates,
                 RetainedDescriptor = distinct.FirstOrDefault(),
                 DuplicateRegistrations = duplicates
             };

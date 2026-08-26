@@ -348,5 +348,23 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                     break;
             }
         }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     An IServiceCollection extension method that validates a lifetime value.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the lifetime is outside the accepted range.
+        /// </exception>
+        /// <param name="lifetime">The lifetime.</param>
+        /// <param name="paramName">Name of the parameter.</param>
+        /// =================================================================================================
+        internal static void SCValidateLifetime(this ServiceLifetime lifetime, string paramName)
+        {
+            if (lifetime != ServiceLifetime.Singleton
+                && lifetime != ServiceLifetime.Scoped
+                && lifetime != ServiceLifetime.Transient)
+                lifetime.ThrowArgumentOutOfRangeException(paramName);
+        }
     }
 }

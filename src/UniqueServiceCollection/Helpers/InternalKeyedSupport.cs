@@ -40,33 +40,85 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         private static readonly PropertyInfo KeyedImplementationInstanceProperty;
         private static readonly MethodInfo DescribeKeyedByTypeMethod;
         private static readonly MethodInfo DescribeKeyedByFactoryMethod;
+        private static readonly Func<ServiceDescriptor, bool> IsKeyedServiceAccessor;
         private static readonly object AnyKeyValue;
 
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Resolves the keyed API late-bound. Every member is bound under its own guard because a
+        ///     throwing type initializer would poison the type for the lifetime of the process and defeat
+        ///     the <see cref="ThrowIfNotSupported" /> diagnostic, and because one failing lookup must not
+        ///     discard the bindings that already succeeded. A member that cannot be bound stays null and
+        ///     <see cref="IsSupported" /> reports the type as "keyed services are not supported".
+        /// </summary>
+        /// =================================================================================================
         static InternalKeyedSupport()
         {
             var descriptorType = typeof(ServiceDescriptor);
 
-            ServiceKeyProperty = descriptorType.GetProperty("ServiceKey");
-            KeyedImplementationTypeProperty = descriptorType.GetProperty("KeyedImplementationType");
-            KeyedImplementationInstanceProperty = descriptorType.GetProperty("KeyedImplementationInstance");
+            ServiceKeyProperty = BindOrNull(() => descriptorType.GetProperty("ServiceKey"));
+            KeyedImplementationTypeProperty = BindOrNull(() => descriptorType.GetProperty("KeyedImplementationType"));
+            KeyedImplementationInstanceProperty = BindOrNull(() => descriptorType.GetProperty("KeyedImplementationInstance"));
 
-            var describeKeyed = descriptorType
+            var describeKeyed = BindOrNull(() => descriptorType
                 .GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .Where(x => x.Name == "DescribeKeyed" && x.GetParameters().Length == 4)
-                .ToList();
+                .ToList());
 
-            DescribeKeyedByTypeMethod = describeKeyed
-                .FirstOrDefault(x => x.GetParameters()[2].ParameterType == typeof(Type));
+            if (describeKeyed.IsNotNull())
+            {
+                DescribeKeyedByTypeMethod = BindOrNull(() => describeKeyed
+                    .FirstOrDefault(x => x.GetParameters()[2].ParameterType == typeof(Type)));
 
-            DescribeKeyedByFactoryMethod = describeKeyed
-                .FirstOrDefault(x => x.GetParameters()[2].ParameterType == typeof(Func<IServiceProvider, object, object>));
+                DescribeKeyedByFactoryMethod = BindOrNull(() => describeKeyed
+                    .FirstOrDefault(x => x.GetParameters()[2].ParameterType == typeof(Func<IServiceProvider, object, object>)));
+            }
 
-            var keyedServiceType = descriptorType.Assembly
-                .GetType("Microsoft.Extensions.DependencyInjection.KeyedService");
+            // Bound to a delegate rather than read through PropertyInfo.GetValue because this runs once
+            // per descriptor on the non-keyed scan path, where reflected invocation would dominate.
+            IsKeyedServiceAccessor = BindOrNull(() =>
+            {
+                var isKeyedServiceGetter = descriptorType.GetProperty("IsKeyedService")?.GetGetMethod();
 
-            if (keyedServiceType.IsNotNull())
-                AnyKeyValue = keyedServiceType.GetProperty("AnyKey", BindingFlags.Public | BindingFlags.Static)?.GetValue(null)
-                              ?? keyedServiceType.GetField("AnyKey", BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
+                return isKeyedServiceGetter.IsNull()
+                    ? null
+                    : (Func<ServiceDescriptor, bool>)isKeyedServiceGetter!
+                        .CreateDelegate(typeof(Func<ServiceDescriptor, bool>));
+            });
+
+            AnyKeyValue = BindOrNull(() =>
+            {
+                var keyedServiceType = descriptorType.Assembly
+                    .GetType("Microsoft.Extensions.DependencyInjection.KeyedService");
+
+                return keyedServiceType.IsNull()
+                    ? null
+                    : keyedServiceType.GetProperty("AnyKey", BindingFlags.Public | BindingFlags.Static)?.GetValue(null)
+                      ?? keyedServiceType.GetField("AnyKey", BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
+            });
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Runs a single late-bound lookup, swallowing any failure so that one unavailable member cannot
+        ///     abort the type initializer or discard the members already bound.
+        /// </summary>
+        /// <typeparam name="TMember">Type of the reflected member.</typeparam>
+        /// <param name="bind">The lookup to run.</param>
+        /// <returns>
+        ///     The resolved member, or null when the lookup failed or found nothing.
+        /// </returns>
+        /// =================================================================================================
+        private static TMember BindOrNull<TMember>(Func<TMember> bind) where TMember : class
+        {
+            try
+            {
+                return bind();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// -------------------------------------------------------------------------------------------------
@@ -77,7 +129,9 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         internal static bool IsSupported
             => ServiceKeyProperty.IsNotNull()
                && DescribeKeyedByTypeMethod.IsNotNull()
-               && DescribeKeyedByFactoryMethod.IsNotNull();
+               && DescribeKeyedByFactoryMethod.IsNotNull()
+               && IsKeyedServiceAccessor.IsNotNull()
+               && AnyKeyValue.IsNotNull();
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -105,6 +159,16 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         /// </summary>
         /// =================================================================================================
         internal static object AnyKey => AnyKeyValue;
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Queries whether a descriptor is a keyed registration by reading
+        ///     <c>ServiceDescriptor.IsKeyedService</c>.
+        /// </summary>
+        /// <param name="descriptor">The descriptor to inspect.</param>
+        /// =================================================================================================
+        internal static bool SCIsKeyedDescriptor(ServiceDescriptor descriptor)
+            => IsKeyedServiceAccessor.IsNotNull() && IsKeyedServiceAccessor(descriptor);
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>

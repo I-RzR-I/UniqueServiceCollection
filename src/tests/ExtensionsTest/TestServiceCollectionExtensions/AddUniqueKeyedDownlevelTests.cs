@@ -1,4 +1,4 @@
-﻿#if !NET8_0_OR_GREATER
+#if !NET8_0_OR_GREATER
 
 #region U S A G E S
 
@@ -24,8 +24,7 @@ namespace ExtensionsTest.TestServiceCollectionExtensions
             var ex = Assert.ThrowsException<PlatformNotSupportedException>(
                 () => collection.AddUniqueKeyed<IServiceInvoke, ServiceInvoke>("tenantA"));
 
-            StringAssert.Contains(ex.Message, "8.0.0",
-                "The message must name the version the caller needs.");
+            StringAssert.Contains(ex.Message, "8.0.0");
             Assert.AreEqual(0, collection.Count);
         }
 
