@@ -24,14 +24,11 @@ using System;
 
 namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     A register service collection extensions.
     /// </summary>
-    /// =================================================================================================
     public static class RegisterServiceCollectionExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that registers service if not exist.
         /// </summary>
@@ -45,7 +42,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <typeparam name="TImplementing">Type of the implementing.</typeparam>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="lifetime">(Optional) The lifetime.</param>
-        /// =================================================================================================
+        /// <returns>
+        ///     An IServiceCollection.
+        /// </returns>
         public static IServiceCollection RegisterIfNotExist<TService, TImplementing>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -59,7 +58,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return serviceCollection;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that registers service if not exist.
         /// </summary>
@@ -72,7 +70,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <typeparam name="TService">Type of the service.</typeparam>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="lifetime">(Optional) The lifetime.</param>
-        /// =================================================================================================
+        /// <returns>
+        ///     An IServiceCollection.
+        /// </returns>
         public static IServiceCollection RegisterIfNotExist<TService>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -85,7 +85,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return serviceCollection;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that registers service if not exist.
         /// </summary>
@@ -99,7 +98,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="factory">The factory.</param>
         /// <param name="lifetime">(Optional) The lifetime.</param>
-        /// =================================================================================================
+        /// <returns>
+        ///     An IServiceCollection.
+        /// </returns>
         public static IServiceCollection RegisterIfNotExist<TService>(this IServiceCollection serviceCollection,
             Func<IServiceProvider, TService> factory, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class

@@ -27,14 +27,11 @@ using System.Linq;
 
 namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     A service collection extensions.
     /// </summary>
-    /// =================================================================================================
     internal static class InternalServiceCollectionExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that query if 'serviceCollection' has any.
         /// </summary>
@@ -46,7 +43,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True if any, false if not.
         /// </returns>
-        /// =================================================================================================
         internal static bool SCHasAny(this IServiceCollection serviceCollection, Type collectionType)
         {
             collectionType.IfNullThrowArgumentNullException(nameof(collectionType));
@@ -55,7 +51,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                    && serviceCollection.Any(x => x.ServiceType == collectionType && x.SCIsNotKeyed());
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that query if 'serviceCollection' has no any.
         /// </summary>
@@ -64,11 +59,9 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True if no any, false if not.
         /// </returns>
-        /// =================================================================================================
         internal static bool SCHasNoAny(this IServiceCollection serviceCollection, Type collectionType)
             => serviceCollection.IsNull() || !serviceCollection.SCHasAny(collectionType);
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that query if 'serviceCollection' has any.
         /// </summary>
@@ -80,13 +73,11 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True if any, false if not.
         /// </returns>
-        /// =================================================================================================
         internal static bool SCHasAny<TService>(this IServiceCollection serviceCollection)
             where TService : class
             => serviceCollection.IsNotNull()
                && serviceCollection.Any(x => x.ServiceType == typeof(TService) && x.SCIsNotKeyed());
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that screen has no any.
         /// </summary>
@@ -95,12 +86,10 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True if it succeeds, false if it fails.
         /// </returns>
-        /// =================================================================================================
         internal static bool SCHasNoAny<TService>(this IServiceCollection serviceCollection)
             where TService : class
             => serviceCollection.IsNull() || !serviceCollection.SCHasAny<TService>();
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that screen count by type.
         /// </summary>
@@ -109,7 +98,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     An int.
         /// </returns>
-        /// =================================================================================================
         internal static int SCCountByType<TService>(this IServiceCollection serviceCollection)
             where TService : class
         {
@@ -119,7 +107,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
             return serviceCollection.Count(x => x.ServiceType == typeof(TService) && x.SCIsNotKeyed());
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that screen count by type.
         /// </summary>
@@ -131,7 +118,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     An int.
         /// </returns>
-        /// =================================================================================================
         internal static int SCCountByType(this IServiceCollection serviceCollection, Type collectionType)
         {
             collectionType.IfNullThrowArgumentNullException(nameof(collectionType));
@@ -142,7 +128,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
             return serviceCollection.Count(x => x.ServiceType == collectionType && x.SCIsNotKeyed());
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that if has any execute action.
         /// </summary>
@@ -152,7 +137,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="collectionType">Type of the collection.</param>
         /// <param name="executeAction">The execute action.</param>
-        /// =================================================================================================
         internal static void SCIfHasAny(this IServiceCollection serviceCollection,
             Type collectionType, Action executeAction)
         {
@@ -164,7 +148,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                 executeAction.Invoke();
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that if has any execute action.
         /// </summary>
@@ -174,7 +157,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <typeparam name="TService">Type of the service.</typeparam>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="executeAction">The execute action.</param>
-        /// =================================================================================================
         internal static void SCIfHasAny<TService>(this IServiceCollection serviceCollection, Action executeAction)
             where TService : class
         {
@@ -185,7 +167,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                 executeAction.Invoke();
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that removes all if has any described by
         ///     serviceCollection.
@@ -195,7 +176,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// </exception>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="collectionType">Type of the collection.</param>
-        /// =================================================================================================
         internal static void SCRemoveAllIfHasAny(this IServiceCollection serviceCollection, Type collectionType)
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));
@@ -205,7 +185,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                 serviceCollection.RemoveAll(collectionType);
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceCollection extension method that removes all if has any described by
         ///     serviceCollection.
@@ -215,7 +194,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// </exception>
         /// <typeparam name="TService">Type of the service.</typeparam>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
-        /// =================================================================================================
         internal static void SCRemoveAllIfHasAny<TService>(this IServiceCollection serviceCollection)
             where TService : class
         {
@@ -225,7 +203,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                 serviceCollection.RemoveAll<TService>();
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that screen add if has no any.
         /// </summary>
@@ -233,7 +210,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="factory">The factory.</param>
         /// <param name="lifetime">The lifetime.</param>
-        /// =================================================================================================
         internal static void SCAddIfHasNoAny<TService>(this IServiceCollection serviceCollection,
             Func<IServiceProvider, TService> factory, ServiceLifetime lifetime)
             where TService : class
@@ -242,14 +218,12 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                 serviceCollection.Add(ServiceDescriptor.Describe(typeof(TService), factory, lifetime));
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that screen add if has no any.
         /// </summary>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="lifetime">The lifetime.</param>
-        /// =================================================================================================
         internal static void SCAddIfHasNoAny(this IServiceCollection serviceCollection,
             Type serviceType, ServiceLifetime lifetime)
         {
@@ -257,7 +231,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                 serviceCollection.SCAddToServiceCollection(serviceType, lifetime);
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that screen add if has no any.
         /// </summary>
@@ -265,7 +238,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="implementationType">Type of the implementation.</param>
         /// <param name="lifetime">The lifetime.</param>
-        /// =================================================================================================
         internal static void SCAddIfHasNoAny(this IServiceCollection serviceCollection,
             Type serviceType, Type implementationType, ServiceLifetime lifetime)
         {
@@ -273,7 +245,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
                 serviceCollection.SCAddToServiceCollection(serviceType, implementationType, lifetime);
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that screen add to service collection.
         /// </summary>
@@ -287,7 +258,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="implementationType">Type of the implementation.</param>
         /// <param name="lifetime">The lifetime.</param>
-        /// =================================================================================================
         internal static void SCAddToServiceCollection(this IServiceCollection serviceCollection,
             Type serviceType, Type implementationType, ServiceLifetime lifetime)
         {
@@ -312,7 +282,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
             }
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that screen add to service collection.
         /// </summary>
@@ -325,7 +294,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="lifetime">The lifetime.</param>
-        /// =================================================================================================
         internal static void SCAddToServiceCollection(this IServiceCollection serviceCollection,
             Type serviceType, ServiceLifetime lifetime)
         {
@@ -349,7 +317,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
             }
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IServiceCollection extension method that validates a lifetime value.
         /// </summary>
@@ -358,7 +325,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// </exception>
         /// <param name="lifetime">The lifetime.</param>
         /// <param name="paramName">Name of the parameter.</param>
-        /// =================================================================================================
         internal static void SCValidateLifetime(this ServiceLifetime lifetime, string paramName)
         {
             if (lifetime != ServiceLifetime.Singleton

@@ -28,11 +28,9 @@ using System.Reflection;
 
 namespace RzR.Extensions.UniqueServiceCollection.Helpers
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Late-bound access to the keyed dependency injection API.
     /// </summary>
-    /// =================================================================================================
     internal static class InternalKeyedSupport
     {
         private static readonly PropertyInfo ServiceKeyProperty;
@@ -43,15 +41,15 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         private static readonly Func<ServiceDescriptor, bool> IsKeyedServiceAccessor;
         private static readonly object AnyKeyValue;
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Resolves the keyed API late-bound. Every member is bound under its own guard because a
-        ///     throwing type initializer would poison the type for the lifetime of the process and defeat
-        ///     the <see cref="ThrowIfNotSupported" /> diagnostic, and because one failing lookup must not
-        ///     discard the bindings that already succeeded. A member that cannot be bound stays null and
+        ///     throwing type initializer would poison the type for the lifetime of the process and
+        ///     defeat the <see cref="ThrowIfNotSupported" /> diagnostic, and because one failing lookup
+        ///     must not discard the bindings that already succeeded. A member that cannot be bound stays
+        ///     null and
         ///     <see cref="IsSupported" /> reports the type as "keyed services are not supported".
+        /// 
         /// </summary>
-        /// =================================================================================================
         static InternalKeyedSupport()
         {
             var descriptorType = typeof(ServiceDescriptor);
@@ -98,17 +96,15 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
             });
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Runs a single late-bound lookup, swallowing any failure so that one unavailable member cannot
-        ///     abort the type initializer or discard the members already bound.
+        ///     Runs a single late-bound lookup, swallowing any failure so that one unavailable member
+        ///     cannot abort the type initializer or discard the members already bound.
         /// </summary>
         /// <typeparam name="TMember">Type of the reflected member.</typeparam>
         /// <param name="bind">The lookup to run.</param>
         /// <returns>
         ///     The resolved member, or null when the lookup failed or found nothing.
         /// </returns>
-        /// =================================================================================================
         private static TMember BindOrNull<TMember>(Func<TMember> bind) where TMember : class
         {
             try
@@ -121,11 +117,12 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
             }
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Gets a value indicating whether the runtime supports keyed service registration.
         /// </summary>
-        /// =================================================================================================
+        /// <value>
+        ///     True if this object is supported, false if not.
+        /// </value>
         internal static bool IsSupported
             => ServiceKeyProperty.IsNotNull()
                && DescribeKeyedByTypeMethod.IsNotNull()
@@ -133,14 +130,12 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
                && IsKeyedServiceAccessor.IsNotNull()
                && AnyKeyValue.IsNotNull();
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Throws when the loaded runtime cannot support keyed service registration.
         /// </summary>
         /// <exception cref="PlatformNotSupportedException">
         ///     Thrown when the loaded DependencyInjection.Abstractions predates 8.0.
         /// </exception>
-        /// =================================================================================================
         internal static void ThrowIfNotSupported()
         {
             if (IsSupported)
@@ -152,25 +147,26 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
                 "AddUniqueKeyed / TryAddUniqueKeyed methods.");
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Gets the wildcard key used by the container to match any key at resolution time, or null
         ///     when the runtime has no keyed support.
         /// </summary>
-        /// =================================================================================================
+        /// <value>
+        ///     any key.
+        /// </value>
         internal static object AnyKey => AnyKeyValue;
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Queries whether a descriptor is a keyed registration by reading
         ///     <c>ServiceDescriptor.IsKeyedService</c>.
         /// </summary>
         /// <param name="descriptor">The descriptor to inspect.</param>
-        /// =================================================================================================
+        /// <returns>
+        ///     True if it succeeds, false if it fails.
+        /// </returns>
         internal static bool SCIsKeyedDescriptor(ServiceDescriptor descriptor)
             => IsKeyedServiceAccessor.IsNotNull() && IsKeyedServiceAccessor(descriptor);
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Reads the service key of a keyed descriptor.
         /// </summary>
@@ -178,11 +174,9 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         /// <returns>
         ///     The registration key, or null when the descriptor is not keyed.
         /// </returns>
-        /// =================================================================================================
         internal static object SCGetServiceKey(this ServiceDescriptor descriptor)
             => ServiceKeyProperty.IsNull() ? null : ServiceKeyProperty.GetValue(descriptor);
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Reads the implementation type of a keyed descriptor.
         /// </summary>
@@ -190,13 +184,11 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         /// <returns>
         ///     The keyed implementation type, or null when unavailable.
         /// </returns>
-        /// =================================================================================================
         internal static Type SCGetKeyedImplementationType(this ServiceDescriptor descriptor)
             => KeyedImplementationTypeProperty.IsNull()
                 ? null
                 : KeyedImplementationTypeProperty.GetValue(descriptor) as Type;
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Reads the implementation instance of a keyed descriptor.
         /// </summary>
@@ -204,13 +196,11 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         /// <returns>
         ///     The keyed implementation instance, or null when unavailable.
         /// </returns>
-        /// =================================================================================================
         internal static object SCGetKeyedImplementationInstance(this ServiceDescriptor descriptor)
             => KeyedImplementationInstanceProperty.IsNull()
                 ? null
                 : KeyedImplementationInstanceProperty.GetValue(descriptor);
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Creates a keyed service descriptor mapping a service type to an implementation type.
         /// </summary>
@@ -218,13 +208,14 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         /// <param name="serviceKey">The registration key.</param>
         /// <param name="implementationType">Type of the implementation.</param>
         /// <param name="lifetime">The lifetime.</param>
-        /// =================================================================================================
+        /// <returns>
+        ///     A ServiceDescriptor.
+        /// </returns>
         internal static ServiceDescriptor SCDescribeKeyed(
             Type serviceType, object serviceKey, Type implementationType, ServiceLifetime lifetime)
             => (ServiceDescriptor)DescribeKeyedByTypeMethod.Invoke(null,
                 new[] { serviceType, serviceKey, implementationType, lifetime });
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Creates a keyed service descriptor backed by a factory.
         /// </summary>
@@ -232,28 +223,28 @@ namespace RzR.Extensions.UniqueServiceCollection.Helpers
         /// <param name="serviceKey">The registration key.</param>
         /// <param name="factory">The factory, receiving the provider and the resolved key.</param>
         /// <param name="lifetime">The lifetime.</param>
-        /// =================================================================================================
+        /// <returns>
+        ///     A ServiceDescriptor.
+        /// </returns>
         internal static ServiceDescriptor SCDescribeKeyed(
             Type serviceType, object serviceKey, Func<IServiceProvider, object, object> factory, ServiceLifetime lifetime)
             => (ServiceDescriptor)DescribeKeyedByFactoryMethod.Invoke(null,
                 new[] { serviceType, serviceKey, factory, lifetime });
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Validates a registration key, rejecting null and the resolution-time wildcard.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown when the key is null.</exception>
-        /// <exception cref="ArgumentException">Thrown when the key is the wildcard key.</exception>
-        /// <param name="serviceKey">The registration key.</param>
-        /// <param name="paramName">Name of the parameter.</param>
         /// <remarks>
-        ///     A null key is rejected rather than silently degraded. The container treats a null key as a
-        ///     conventional non-keyed registration, so accepting one would let a keyed call quietly
+        ///     A null key is rejected rather than silently degraded. The container treats a null key as
+        ///     a conventional non-keyed registration, so accepting one would let a keyed call quietly
         ///     replace the non-keyed registration of the same service type. The wildcard key is a
         ///     resolution-time construct that matches every key; registering under it would shadow every
         ///     keyed registration of that service type.
         /// </remarks>
-        /// =================================================================================================
+        /// <exception cref="ArgumentException">Thrown when the key is the wildcard key.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when the key is null.</exception>
+        /// <param name="serviceKey">The registration key.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         internal static void SCValidateServiceKey(object serviceKey, string paramName)
         {
             serviceKey.IfNullThrowArgumentNullException(paramName);

@@ -22,14 +22,11 @@ using System;
 
 namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     An internal object exception extensions.
     /// </summary>
-    /// =================================================================================================
     internal static class InternalObjectExceptionExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An object extension method that if null throw argument null exception.
         /// </summary>
@@ -38,14 +35,12 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// </exception>
         /// <param name="sourceObj">The sourceObj to act on.</param>
         /// <param name="paramName">Name of the parameter.</param>
-        /// =================================================================================================
         internal static void IfNullThrowArgumentNullException(this object sourceObj, string paramName)
         {
             if (sourceObj.IsNull())
                 throw new ArgumentNullException(paramName);
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An object extension method that if null throw argument null exception.
         /// </summary>
@@ -55,31 +50,26 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <param name="sourceObj">The sourceObj to act on.</param>
         /// <param name="paramName">Name of the parameter.</param>
         /// <param name="exception">The exception.</param>
-        /// =================================================================================================
         internal static void IfNullThrowArgumentNullException(this object sourceObj, string paramName, Exception exception)
         {
             if (sourceObj.IsNull())
                 throw new ArgumentNullException(paramName, exception);
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An object extension method that throw argument out of range exception.
         /// </summary>
         /// <param name="sourceObj">The sourceObj to act on.</param>
         /// <param name="paramName">Name of the parameter.</param>
-        /// =================================================================================================
         internal static void ThrowArgumentOutOfRangeException(this object sourceObj, string paramName) 
             => throw new ArgumentOutOfRangeException(paramName, sourceObj, "Supplied parameter is not supported(is out of accepted range)!");
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An object extension method that throw argument out of range exception.
         /// </summary>
         /// <param name="sourceObj">The sourceObj to act on.</param>
         /// <param name="paramName">Name of the parameter.</param>
         /// <param name="exceptionMessage">Message describing the exception.</param>
-        /// =================================================================================================
         internal static void ThrowArgumentOutOfRangeException(this object sourceObj, string paramName, string exceptionMessage) 
             => throw new ArgumentOutOfRangeException(paramName, sourceObj, exceptionMessage);
     }

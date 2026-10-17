@@ -23,14 +23,11 @@ using System.Linq;
 
 namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     A data collection extensions.
     /// </summary>
-    /// =================================================================================================
     internal static class InternalCollectionExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IEnumerable&lt;T&gt; extension method that query if 'collection' has any.
         /// </summary>
@@ -39,11 +36,9 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True if any, false if not.
         /// </returns>
-        /// =================================================================================================
         internal static bool HasAnyInCollection<T>(this IEnumerable<T> collection)
             => collection.IsNotNull() && collection.Any();
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     An IEnumerable&lt;T&gt; extension method that query if 'collection' has no any.
         /// </summary>
@@ -52,7 +47,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True if no any, false if not.
         /// </returns>
-        /// =================================================================================================
         internal static bool HasNoAnyInCollection<T>(this IEnumerable<T> collection)
             => !collection.HasAnyInCollection();
     }

@@ -25,20 +25,19 @@ using System;
 
 namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Add unique keyed services to the application service collection.
     /// </summary>
-    /// =================================================================================================
     public static class AddUniqueKeyedExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique keyed service of the type <typeparamref name="TService" /> with its
-        ///     implementation on <typeparamref name="TImplementing" /> under <paramref name="serviceKey" />.
+        ///     implementation on <typeparamref name="TImplementing" /> under <paramref name="serviceKey" />
+        ///     .
         /// </summary>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is null.
+        ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is
+        ///     null.
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     Thrown when <paramref name="serviceKey" /> is the resolution-time wildcard key.
@@ -56,11 +55,10 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// </returns>
         /// <example>
         ///     <code>
-        ///     serviceCollection.AddUniqueKeyed&lt;IStore, BlobStore&gt;("tenantA");
-        ///     serviceCollection.AddUniqueKeyed&lt;IStore, FileStore&gt;("tenantB", ServiceLifetime.Scoped);
+        ///         serviceCollection.AddUniqueKeyed&lt;IStore, BlobStore&gt;("tenantA");
+        ///         serviceCollection.AddUniqueKeyed&lt;IStore, FileStore&gt;("tenantB", ServiceLifetime.Scoped);
         ///     </code>
         /// </example>
-        /// =================================================================================================
         public static IServiceCollection AddUniqueKeyed<TService, TImplementing>(this IServiceCollection serviceCollection,
             object serviceKey, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -78,13 +76,13 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return serviceCollection;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique keyed service of the type <typeparamref name="TService" /> as its own
         ///     implementation under <paramref name="serviceKey" />.
         /// </summary>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is null.
+        ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is
+        ///     null.
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     Thrown when <paramref name="serviceKey" /> is the resolution-time wildcard key.
@@ -92,20 +90,20 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="PlatformNotSupportedException">
         ///     Thrown when the loaded DependencyInjection.Abstractions predates 8.0.
         /// </exception>
-        /// <typeparam name="TService">Type of the service. Must be a concrete, instantiable type.</typeparam>
+        /// <typeparam name="TService">
+        ///     Type of the service. Must be a concrete, instantiable type.
+        /// </typeparam>
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="serviceKey">Required. The registration key.</param>
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
         ///     The original <paramref name="serviceCollection" />, for fluent chaining.
         /// </returns>
-        /// =================================================================================================
         public static IServiceCollection AddUniqueKeyed<TService>(this IServiceCollection serviceCollection,
             object serviceKey, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
             => serviceCollection.AddUniqueKeyed(typeof(TService), serviceKey, typeof(TService), lifetime);
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique keyed service of the type <typeparamref name="TService" /> with the supplied
         ///     factory under <paramref name="serviceKey" />.
@@ -124,7 +122,8 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="serviceKey">Required. The registration key.</param>
         /// <param name="factory">
-        ///     Required. Factory receiving the service provider and the key the service was resolved with.
+        ///     Required. Factory receiving the service provider and the key the service was resolved
+        ///     with.
         /// </param>
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
@@ -136,7 +135,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         ///         (provider, key) =&gt; new BlobStore(provider.GetRequiredService&lt;IConfig&gt;(), key));
         ///     </code>
         /// </example>
-        /// =================================================================================================
         public static IServiceCollection AddUniqueKeyed<TService>(this IServiceCollection serviceCollection,
             object serviceKey, Func<IServiceProvider, object, TService> factory,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
@@ -155,19 +153,19 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return serviceCollection;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Add unique keyed service of the type <paramref name="serviceType" /> with its implementation
-        ///     on <paramref name="implementationType" /> under <paramref name="serviceKey" />.
+        ///     Add unique keyed service of the type <paramref name="serviceType" /> with its
+        ///     implementation on <paramref name="implementationType" /> under <paramref name="serviceKey" />.
         /// </summary>
+        /// <exception cref="ArgumentException">
+        ///     Thrown when <paramref name="serviceKey" /> is the resolution-time wildcard key, when
+        ///     exactly one of <paramref name="serviceType" /> and <paramref name="implementationType" />
+        ///     is an open generic type definition, or when <paramref name="implementationType" /> is not
+        ///     assignable to
+        ///     <paramref name="serviceType" />.
+        /// </exception>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        ///     Thrown when <paramref name="serviceKey" /> is the resolution-time wildcard key, when exactly
-        ///     one of <paramref name="serviceType" /> and <paramref name="implementationType" /> is an open
-        ///     generic type definition, or when <paramref name="implementationType" /> is not assignable to
-        ///     <paramref name="serviceType" />.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown when <paramref name="lifetime" /> is outside the accepted range.
@@ -183,7 +181,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <returns>
         ///     The original <paramref name="serviceCollection" />, for fluent chaining.
         /// </returns>
-        /// =================================================================================================
         public static IServiceCollection AddUniqueKeyed(this IServiceCollection serviceCollection,
             Type serviceType, object serviceKey, Type implementationType,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
@@ -219,13 +216,13 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return serviceCollection;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Registers <typeparamref name="TImplementing" /> under <paramref name="serviceKey" /> when no
-        ///     registration of <typeparamref name="TService" /> exists for that key (first-wins).
+        ///     Registers <typeparamref name="TImplementing" /> under <paramref name="serviceKey" /> when
+        ///     no registration of <typeparamref name="TService" /> exists for that key (first-wins). 
         /// </summary>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is null.
+        ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is
+        ///     null.
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     Thrown when <paramref name="serviceKey" /> is the resolution-time wildcard key.
@@ -240,10 +237,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
         ///     True when the registration was added; false when the key is already served, either by an
-        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of the
-        ///     same service type.
+        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of
+        ///     the same service type.
         /// </returns>
-        /// =================================================================================================
         public static bool TryAddUniqueKeyed<TService, TImplementing>(this IServiceCollection serviceCollection,
             object serviceKey, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -263,13 +259,14 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return true;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Registers <typeparamref name="TService" /> as its own implementation under
         ///     <paramref name="serviceKey" /> when no registration exists for that key (first-wins).
+        /// 
         /// </summary>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is null.
+        ///     Thrown when <paramref name="serviceCollection" /> or <paramref name="serviceKey" /> is
+        ///     null.
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     Thrown when <paramref name="serviceKey" /> is the resolution-time wildcard key.
@@ -277,16 +274,17 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="PlatformNotSupportedException">
         ///     Thrown when the loaded DependencyInjection.Abstractions predates 8.0.
         /// </exception>
-        /// <typeparam name="TService">Type of the service. Must be a concrete, instantiable type.</typeparam>
+        /// <typeparam name="TService">
+        ///     Type of the service. Must be a concrete, instantiable type.
+        /// </typeparam>
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="serviceKey">Required. The registration key.</param>
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
         ///     True when the registration was added; false when the key is already served, either by an
-        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of the
-        ///     same service type.
+        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of
+        ///     the same service type.
         /// </returns>
-        /// =================================================================================================
         public static bool TryAddUniqueKeyed<TService>(this IServiceCollection serviceCollection,
             object serviceKey, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -305,10 +303,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return true;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Registers <typeparamref name="TService" /> with the supplied factory under
-        ///     <paramref name="serviceKey" /> when no registration exists for that key (first-wins).
+        ///     <paramref name="serviceKey" /> when no registration exists for that key (first-wins). 
         /// </summary>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="serviceCollection" />, <paramref name="serviceKey" /> or
@@ -324,15 +321,15 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="serviceKey">Required. The registration key.</param>
         /// <param name="factory">
-        ///     Required. Factory receiving the service provider and the key the service was resolved with.
+        ///     Required. Factory receiving the service provider and the key the service was resolved
+        ///     with.
         /// </param>
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
         ///     True when the registration was added; false when the key is already served, either by an
-        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of the
-        ///     same service type.
+        ///     existing registration under that key or by a <c>KeyedService.AnyKey</c> registration of
+        ///     the same service type.
         /// </returns>
-        /// =================================================================================================
         public static bool TryAddUniqueKeyed<TService>(this IServiceCollection serviceCollection,
             object serviceKey, Func<IServiceProvider, object, TService> factory,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
