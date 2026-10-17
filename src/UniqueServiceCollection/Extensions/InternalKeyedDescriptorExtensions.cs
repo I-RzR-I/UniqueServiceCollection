@@ -25,14 +25,11 @@ using RzR.Extensions.UniqueServiceCollection.Helpers;
 
 namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Detection of keyed service descriptors from a netstandard2.0 assembly.
     /// </summary>
-    /// =================================================================================================
     internal static class InternalKeyedDescriptorExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceDescriptor extension method that queries whether the descriptor is a keyed
         ///     registration.
@@ -41,21 +38,19 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True when the descriptor represents a keyed service registration, false when it is a
         ///     conventional (non-keyed) registration or when <paramref name="descriptor" /> is null.
+        /// 
         /// </returns>
-        /// =================================================================================================
         internal static bool SCIsKeyed(this ServiceDescriptor descriptor)
             => descriptor.IsNotNull() && InternalKeyedSupport.SCIsKeyedDescriptor(descriptor);
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     A ServiceDescriptor extension method that queries whether the descriptor is a conventional
-        ///     (non-keyed) registration.
+        ///     A ServiceDescriptor extension method that queries whether the descriptor is a
+        ///     conventional (non-keyed) registration.
         /// </summary>
         /// <param name="descriptor">The descriptor to act on.</param>
         /// <returns>
         ///     True when the descriptor is a non-keyed registration, false when it is keyed.
         /// </returns>
-        /// =================================================================================================
         internal static bool SCIsNotKeyed(this ServiceDescriptor descriptor)
             => !descriptor.SCIsKeyed();
     }

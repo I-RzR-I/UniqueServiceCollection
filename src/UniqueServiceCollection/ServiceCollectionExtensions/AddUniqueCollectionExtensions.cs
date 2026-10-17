@@ -24,17 +24,14 @@ using System;
 
 namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Add unique service to application service collection.
     /// </summary>
     /// <remarks>
     ///     All previous defined service of specified type will be removed from collection.
     /// </remarks>
-    /// =================================================================================================
     public static partial class AddUniqueCollectionExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique service of the type <typeparamref name="TService" />
         ///     with his implementation on the specified type <typeparamref name="TImplementing" />
@@ -56,12 +53,13 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="lifetime">
         ///     (Optional) Optional. The default value is ServiceLifetime.Singleton.
         /// </param>
+        /// <returns>
+        ///     An IServiceCollection.
+        /// </returns>
         /// <example>
         ///     serviceCollection.AddUnique&lt;IServiceOne, ServiceOne&gt;();
-        ///     serviceCollection.AddUnique&lt;IServiceOne, ServiceOne&gt;(ServiceLifetime.Scoped);
-        /// 
+        ///     serviceCollection.AddUnique&lt;IServiceOne, ServiceOne&gt;(ServiceLifetime.Scoped); 
         /// </example>
-        /// =================================================================================================
         public static IServiceCollection AddUnique<TService, TImplementing>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -77,7 +75,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return serviceCollection;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique service of the type <typeparamref name="TService" /> with specified  factory
         ///     to current <see cref="IServiceCollection" />.
@@ -98,15 +95,18 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="lifetime">
         ///     (Optional) Optional. The default value is ServiceLifetime.Singleton.
         /// </param>
+        /// <returns>
+        ///     An IServiceCollection.
+        /// </returns>
         /// <example>
         ///     serviceCollection.AddUnique&lt;IService&gt;(factory =>
         ///     {
-        ///     IHostingEnvironment hostingEnvironment = factory.GetRequiredService&lt;
-        ///     IHostingEnvironment&gt;();
-        ///     return new OsHelper(hostingEnvironment);
+        ///         IHostingEnvironment hostingEnvironment = factory.GetRequiredService&lt;
+        ///         IHostingEnvironment&gt;();
+        ///         
+        ///         return new OsHelper(hostingEnvironment);
         ///     });
         /// </example>
-        /// =================================================================================================
         public static IServiceCollection AddUnique<TService>(this IServiceCollection serviceCollection,
             Func<IServiceProvider, TService> factory, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -122,7 +122,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return serviceCollection;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique service of the type <typeparamref name="TService" />
         ///     to current <see cref="IServiceCollection" />.
@@ -140,7 +139,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <typeparam name="TService">Type of the service.</typeparam>
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
-        /// =================================================================================================
+        /// <returns>
+        ///     An IServiceCollection.
+        /// </returns>
         public static IServiceCollection AddUnique<TService>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime)
             where TService : class
@@ -155,7 +156,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return serviceCollection;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Add unique service of the type <paramref name="serviceType" />
         ///     to current <see cref="IServiceCollection" />.
@@ -173,7 +173,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="lifetime">Optional. The default value is ServiceLifetime.Singleton.</param>
-        /// =================================================================================================
+        /// <returns>
+        ///     An IServiceCollection.
+        /// </returns>
         public static IServiceCollection AddUnique(this IServiceCollection serviceCollection,
             Type serviceType, ServiceLifetime lifetime)
         {

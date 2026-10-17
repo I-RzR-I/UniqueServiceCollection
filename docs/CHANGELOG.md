@@ -1,3 +1,8 @@
+### **v3.2.0.662** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 18-10-2026
+* [643b830] (RzR) -> Auto commit uncommited files
+* [db2f78e] (RzR) -> Update the summary mode to use the same pattern.
+* [03a1980] (RzR) -> Upgrade ref package version.
+
 ### **v3.1.0.7565** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 26-08-2026
 * [DEV] - (RzR) -> `TryAddUnique*` — first-wins registration returning `bool` (true when added).
 * [DEV] - (RzR) -> `AddUniqueKeyed*` — keyed registration, unique per `(ServiceType, ServiceKey)`; sibling keys and the non-keyed registration are untouched.

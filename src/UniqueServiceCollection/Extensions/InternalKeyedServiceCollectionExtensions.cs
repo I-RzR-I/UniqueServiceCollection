@@ -27,14 +27,11 @@ using System.Linq;
 
 namespace RzR.Extensions.UniqueServiceCollection.Extensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Service collection helpers scoped to keyed registrations.
     /// </summary>
-    /// =================================================================================================
     internal static class InternalKeyedServiceCollectionExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     A ServiceDescriptor extension method that queries whether the descriptor is a keyed
         ///     registration of the given service type under the given key.
@@ -45,16 +42,14 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True when the descriptor matches both the service type and the key.
         /// </returns>
-        /// =================================================================================================
         internal static bool SCMatchesKeyed(this ServiceDescriptor descriptor, Type serviceType, object serviceKey)
             => descriptor.SCIsKeyed()
                && descriptor.ServiceType == serviceType
                && Equals(descriptor.SCGetServiceKey(), serviceKey);
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     An IServiceCollection extension method that queries whether any registration exists for the
-        ///     given service type under the given key.
+        ///     An IServiceCollection extension method that queries whether any registration exists for
+        ///     the given service type under the given key.
         /// </summary>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="serviceType">Type of the service.</param>
@@ -62,7 +57,6 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     True if any, false if not.
         /// </returns>
-        /// =================================================================================================
         internal static bool SCHasAnyKeyed(this IServiceCollection serviceCollection, Type serviceType, object serviceKey)
             => serviceCollection.IsNotNull()
                && serviceCollection.Any(x => x.SCMatchesKeyed(serviceType, serviceKey));
@@ -115,10 +109,9 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
             => serviceCollection.IsNotNull()
                && serviceCollection.Any(x => x.SCSatisfiesKeyed(serviceType, serviceKey));
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     An IServiceCollection extension method that counts registrations for the given service type
-        ///     under the given key.
+        ///     An IServiceCollection extension method that counts registrations for the given service
+        ///     type under the given key.
         /// </summary>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="serviceType">Type of the service.</param>
@@ -126,21 +119,19 @@ namespace RzR.Extensions.UniqueServiceCollection.Extensions
         /// <returns>
         ///     An int.
         /// </returns>
-        /// =================================================================================================
         internal static int SCCountByKeyed(this IServiceCollection serviceCollection, Type serviceType, object serviceKey)
             => serviceCollection.IsNull()
                 ? 0
                 : serviceCollection.Count(x => x.SCMatchesKeyed(serviceType, serviceKey));
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     An IServiceCollection extension method that removes every registration for the given service
-        ///     type under the given key, leaving other keys and the non-keyed registration untouched.
+        ///     An IServiceCollection extension method that removes every registration for the given
+        ///     service type under the given key, leaving other keys and the non-keyed registration
+        ///     untouched.
         /// </summary>
         /// <param name="serviceCollection">The serviceCollection to act on.</param>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="serviceKey">The registration key.</param>
-        /// =================================================================================================
         internal static void SCRemoveAllKeyed(this IServiceCollection serviceCollection, Type serviceType, object serviceKey)
         {
             serviceCollection.IfNullThrowArgumentNullException(nameof(serviceCollection));

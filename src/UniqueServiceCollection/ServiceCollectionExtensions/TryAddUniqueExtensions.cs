@@ -24,15 +24,12 @@ using System;
 
 namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Register a service only when its service type is not already registered (first-wins), and
     ///     report whether the registration happened.
     /// </summary>
-    /// =================================================================================================
     public static class TryAddUniqueExtensions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Registers <typeparamref name="TImplementing" /> as the implementation of
         ///     <typeparamref name="TService" /> when no registration of <typeparamref name="TService" />
@@ -58,7 +55,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         ///         logger.LogWarning("IServiceOne was already registered by another module.");
         ///     </code>
         /// </example>
-        /// =================================================================================================
         public static bool TryAddUnique<TService, TImplementing>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -75,9 +71,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return true;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Registers <typeparamref name="TService" /> as its own implementation when no registration of
+        ///     Registers <typeparamref name="TService" /> as its own implementation when no registration
+        ///     of
         ///     <typeparamref name="TService" /> exists yet.
         /// </summary>
         /// <exception cref="ArgumentNullException">
@@ -86,13 +82,14 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown when <paramref name="lifetime" /> is not a defined lifetime.
         /// </exception>
-        /// <typeparam name="TService">Type of the service. Must be a concrete, instantiable type.</typeparam>
+        /// <typeparam name="TService">
+        ///     Type of the service. Must be a concrete, instantiable type.
+        /// </typeparam>
         /// <param name="serviceCollection">Required. Service collection.</param>
         /// <param name="lifetime">(Optional) The default value is ServiceLifetime.Singleton.</param>
         /// <returns>
         ///     True when the registration was added; false when one already existed.
         /// </returns>
-        /// =================================================================================================
         public static bool TryAddUnique<TService>(this IServiceCollection serviceCollection,
             ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
@@ -108,9 +105,9 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
             return true;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Registers <typeparamref name="TService" /> with the supplied factory when no registration of
+        ///     Registers <typeparamref name="TService" /> with the supplied factory when no registration
+        ///     of
         ///     <typeparamref name="TService" /> exists yet.
         /// </summary>
         /// <exception cref="ArgumentNullException">
@@ -126,7 +123,6 @@ namespace RzR.Extensions.UniqueServiceCollection.ServiceCollectionExtensions
         /// <returns>
         ///     True when the registration was added; false when one already existed.
         /// </returns>
-        /// =================================================================================================
         public static bool TryAddUnique<TService>(this IServiceCollection serviceCollection,
             Func<IServiceProvider, TService> factory, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TService : class
